@@ -35,7 +35,8 @@ package common;
     typedef u5 creg_addr_t;
     typedef u32 word_t;
     
-	
+	//hcx
+
 endpackage
 
 `endif
