@@ -46,9 +46,15 @@ module Top
             end 
             else begin
                 case (pc)
-                    PC_SUCCESS: result <= 2'b10;
-                    PC_FAILED: result <= 2'b01;
-                    default: result <= 2'b00;
+                    PC_SUCCESS: begin
+                        result <= 2'b10;
+                    end
+                    PC_FAILED1, PC_FAILED2, PC_FAILED3: begin
+                        result <= 2'b01;
+                    end
+                    default: begin
+                        result <= 2'b00;
+                    end
                 endcase
                 prev_result <= result;
             end
