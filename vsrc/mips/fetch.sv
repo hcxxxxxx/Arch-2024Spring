@@ -1,25 +1,36 @@
 `ifndef __FETCH_SV
 `define __FETCH_SV
 
+/*
 module fetch
     import common::*;
     import pipes::*;(
-        
+        input u32 instr_addr,
+        output u32 instruction
+    );
+
+    Imem imem(
+        .pc(instr_addr),
+        .instruction(instruction)
     );
 
 endmodule
+*/
 
-/* maybe userful */
-module pcselect
+/*module pcselect
     import common::*;
     import pipes::*;(
-        input u1 clk, reset,
-        input u32 pc_plus,
-        input u32 jump_addr,
-        input u1 jump,
+        input logic clk, reset,
+        input u32 pc_nxt,
+        input u32 branch_address,
+        input logic branch, equal, jump,
         output u32 pc_selected
     );
 
-endmodule
+    always_ff @(posedge clk) begin
+        
+    end
+
+endmodule*/
 
 `endif

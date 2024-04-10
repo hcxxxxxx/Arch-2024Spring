@@ -12,12 +12,15 @@ module regfile
         input creg_addr_t wa,
         input word_t wd,
         input logic we
+        //regs
+        //output word_t [31:0] regs_tmp
     );
     word_t [31:0] regs, regs_nxt;
 
     // assign
     assign rd1 = (ra1 == 0) ? '0 : regs[ra1];
     assign rd2 = (ra2 == 0) ? '0 : regs[ra2];
+    //assign regs_tmp = regs;
 
     // posedge
     always_ff @(posedge clk) begin

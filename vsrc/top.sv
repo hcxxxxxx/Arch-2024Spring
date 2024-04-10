@@ -4,19 +4,27 @@
 module Top
     import common::*;(
         input logic clk, reset,
-        output u2 result
+        output u2 result// prev_result,
+        //output u32 pc
+        /*output u1 delay_slot,
+        output u1 branch, equal*/
+        //output word_t [31:0] regs_tmp
     );
     
-    u32 pc, instruction, data_addr;
+    u32 instruction, data_addr;
     word_t read_data, write_data;
     u1 write_enable;
+    u32 pc;
     
     /* instantiate a core */
     core core(
         .clk(clk), .reset(reset),
         .instr_addr(pc), .instruction(instruction),
         .data_addr(data_addr), .write_enable(write_enable),
-        .read_data(read_data), .write_data(write_data)
+        .read_data(read_data), .write_data(write_data)/*,
+        .delay_slot(delay_slot),
+        .branch(branch), .equal(equal)*/
+        //.regs_tmp(regs_tmp)
     );
 
     /* instantiate imem and dmem */
@@ -35,7 +43,7 @@ module Top
     // for test
     logic [1:0] prev_result;
 
-    always_ff @(posedge clk) begin
+    always_ff @(posedge clk/*, posedge reset*/) begin
         if (reset) begin
             result <= 2'b00;
             prev_result <= 2'b00;
@@ -46,9 +54,15 @@ module Top
             end 
             else begin
                 case (pc)
-                    PC_SUCCESS: result <= 2'b10;
-                    PC_FAILED: result <= 2'b01;
-                    default: result <= 2'b00;
+                    PC_SUCCESS: begin
+                        result <= 2'b10;
+                    end
+                    PC_FAILED1, PC_FAILED2, PC_FAILED3: begin
+                        result <= 2'b01;
+                    end
+                    default: begin
+                        result <= 2'b00;
+                    end
                 endcase
                 prev_result <= result;
             end

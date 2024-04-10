@@ -8,7 +8,9 @@ package common;
 	parameter LINK_REG_ID = 1;
 	parameter logic[63:0] PCINIT = 64'h00000000_80000000;
 	parameter PC_SUCCESS = 32'h0000_00f8;
-	parameter PC_FAILED = 32'h0000_00f0;
+	parameter PC_FAILED1 = 32'h0000_00f0;
+	parameter PC_FAILED2 = 32'h0000_00f4;
+	parameter PC_FAILED3 = 32'h0000_00fc;
 
 	// typedefs
 	typedef logic[128:0] u129;
@@ -18,6 +20,7 @@ package common;
 	// typedef logic[62:0] u63;
 	typedef logic[43:0] u44;
 	typedef logic[31:0] u32;
+	typedef logic[25:0] u26;
 	typedef logic[19:0] u20;
 	typedef logic[15:0] u16;
 	typedef logic[14:0] u15;
