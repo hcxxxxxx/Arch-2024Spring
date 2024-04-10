@@ -35,7 +35,7 @@ module dmem
         output word_t read_data
     );
 
-    u32 mem [2**VALID_ADDR_WIDTH-1:0];
+    u8 mem [2**VALID_ADDR_WIDTH-1:0];
 
     // read port
     assign read_data = mem[addr[VALID_ADDR_WIDTH-1:0]];
@@ -43,7 +43,10 @@ module dmem
     // write port
     always_ff @(posedge clk) begin
         if (we) begin
-            mem[addr[VALID_ADDR_WIDTH-1:0]] <= write_data;
+            mem[addr[VALID_ADDR_WIDTH-1:0]] <= write_data[31:24];
+            mem[addr[VALID_ADDR_WIDTH-1:0]+1] <= write_data[23:16];
+            mem[addr[VALID_ADDR_WIDTH-1:0]+2] <= write_data[15:8];
+            mem[addr[VALID_ADDR_WIDTH-1:0]+3] <= write_data[7:0];
         end
     end
 
