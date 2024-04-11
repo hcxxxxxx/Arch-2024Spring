@@ -74,6 +74,7 @@ module FSM
                     F: next_state = D;
                     D: next_state = E;
                     E: next_state = F;
+                    default: next_state = F;
                 endcase
             end
 
