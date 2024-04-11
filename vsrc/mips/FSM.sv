@@ -37,6 +37,7 @@ module FSM
                         default: next_state = F;
                     endcase
                 end
+                
                 else begin
                     case(state)
                         F: next_state = D;
