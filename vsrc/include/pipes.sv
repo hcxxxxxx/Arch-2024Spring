@@ -6,6 +6,8 @@ package pipes;
     
 /* Define instruction decoding rules here */
 
+    parameter u6 F6_R_TYPE = 6'b000000;
+
     //No operation instruction
     parameter u6 F6_NOP = 6'b000000;
 
