@@ -27,7 +27,7 @@ module FSM
     end
 
     always_comb begin
-        unique case(op)
+        /*unique case(op)
             //r-type
             F6_R_TYPE: begin
                 if(func == F6_NOP) begin
@@ -78,6 +78,28 @@ module FSM
                 endcase
             end
 
+        endcase*/
+
+        case(state)
+            F: next_state = D;
+
+            D: begin
+                case(op)
+                    //R-type
+                    F6_R_TYPE: begin
+                        if(func == F6_NOP) next_state = F;
+                        else next_state = E;
+                    end
+
+                    //J
+                    F6_J: next_state = F;
+
+                    //BEQ, SW, LW
+                    
+                endcase
+            end
+
+            default: next_state = F;
         endcase
     end
 
