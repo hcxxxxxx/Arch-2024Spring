@@ -27,84 +27,43 @@ module FSM
     end
 
     always_comb begin
-        /*unique case(op)
-            //r-type
-            F6_R_TYPE: begin
-                if(func == F6_NOP) begin
-                    case(state)
-                        F: next_state = D;
-                        D: next_state = F;
-                        default: next_state = F;
-                    endcase
-                end
-                
-                else begin
-                    case(state)
-                        F: next_state = D;
-                        D: next_state = E;
-                        E: next_state = W;
-                        W: next_state = F;
-                        default: next_state = F;
-                    endcase
-                end
-            end
-
-            //addi
-            F6_ADDI: begin
-                case(state)
-                    F: next_state = D;
-                    D: next_state = E;
-                    E: next_state = W;
-                    W: next_state = F;
-                    default: next_state = F;
-                endcase
-            end
-
-            //branch
-            F6_J: begin
-                case(state)
-                    F: next_state = D;
-                    D: next_state = F;
-                    default: next_state = F;
-                endcase
-            end
-
-            F6_BEQ: begin
-                case(state)
-                    F: next_state = D;
-                    D: next_state = E;
-                    E: next_state = F;
-                    default: next_state = F;
-                endcase
-            end
-
-        endcase*/
-
-        case(state)
+        unique case(state)
             F: next_state = D;
 
             D: begin
                 case(op)
-                    //R-type
+                    F6_J: next_state = F;
+                    F6_BEQ, F6_SW, F6_LW, F6_ADDI: next_state = E;
                     F6_R_TYPE: begin
                         if(func == F6_NOP) next_state = F;
                         else next_state = E;
                     end
-
-                    //J
-                    F6_J: next_state = F;
-
-                    //BEQ, SW, LW
-                    
+                    default: next_state = F;
                 endcase
             end
+
+            E: begin
+                case(op)
+                    F6_BEQ: next_state = F;
+                    F6_R_TYPE: next_state = W;
+                    F6_SW, F6_LW: next_state = M;
+                    default: next_state = F;
+                endcase
+            end
+
+            M: begin
+                case(op)
+                    F6_SW: next_state = F;
+                    F6_LW: next_state = W;
+                    default: next_state = F;
+                endcase
+            end
+
+            W: next_state = F;
 
             default: next_state = F;
         endcase
     end
-
-
-   
 
 endmodule
 
