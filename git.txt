@@ -1,0 +1,6 @@
+git push <origin> --delete <branch>                 # To delete a remote branch
+git branch -d <branch>                              # To delete a local branch
+
+git add .
+git commit -m "<Information>"
+git push <origin> <branch>                          # To update remote repository
