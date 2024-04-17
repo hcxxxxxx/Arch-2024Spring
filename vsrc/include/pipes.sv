@@ -37,6 +37,26 @@ package pipes;
         NOP, ADD, SUB, AND, OR, SLT, ADDI, LW, SW, J, BEQ
     } decode_op_t;*/
 
+    typedef struct {
+
+    } fetch_data_t;
+
+    typedef struct {
+
+    } decode_data_t;
+
+    typedef struct {
+
+    } execute_data_t;
+
+    typedef struct {
+
+    } memory_data_t;
+
+    typedef struct {
+
+    } writeback_data_t;
+
 endpackage
 
 `endif

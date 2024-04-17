@@ -1,10 +1,11 @@
 `ifndef __FETCH_SV
 `define __FETCH_SV
 
-/*
+
 module fetch
     import common::*;
     import pipes::*;(
+        input logic clk,
         input u32 instr_addr,
         output u32 instruction
     );
@@ -15,7 +16,6 @@ module fetch
     );
 
 endmodule
-*/
 
 /*module pcselect
     import common::*;

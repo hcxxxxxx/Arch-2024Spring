@@ -5,22 +5,13 @@ module TopTest;
 
     // testbench signals
     logic clk, reset;
-    logic [1:0] result;//, prev_result;
-    //logic [31:0] pc;
-    //logic delay_slot;
-    //logic branch, equal;
-    //logic [31:0] [31:0] regs_tmp;
+    logic [1:0] result;
 
     /* instantiate */
     Top top (
         .clk(clk),
         .reset(reset),
         .result(result)
-        //.prev_result(prev_result),
-        //.pc(pc)
-        //.delay_slot(delay_slot),
-        //.branch(branch), .equal(equal)
-        //.regs_tmp(regs_tmp)
     );
 
     // clock generation

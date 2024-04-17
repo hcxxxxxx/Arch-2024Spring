@@ -4,11 +4,7 @@
 module Top
     import common::*;(
         input logic clk, reset,
-        output u2 result// prev_result,
-        //output u32 pc
-        /*output u1 delay_slot,
-        output u1 branch, equal*/
-        //output word_t [31:0] regs_tmp
+        output u2 result
     );
     
     u32 instruction, data_addr;
@@ -21,10 +17,7 @@ module Top
         .clk(clk), .reset(reset),
         .instr_addr(pc), .instruction(instruction),
         .data_addr(data_addr), .write_enable(write_enable),
-        .read_data(read_data), .write_data(write_data)/*,
-        .delay_slot(delay_slot),
-        .branch(branch), .equal(equal)*/
-        //.regs_tmp(regs_tmp)
+        .read_data(read_data), .write_data(write_data)
     );
 
     /* instantiate imem and dmem */
