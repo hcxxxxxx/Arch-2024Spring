@@ -23,7 +23,7 @@ module core
     creg_addr_t rs, rt, rd, wa;
     u16 imm;
     logic mem_to_reg, branch, equal, jump, alu_src, reg_write, reg_dst;
-    logic delay_slot = 0; //=1 if branch on next posedge
+    //logic delay_slot = 0; //=1 if branch on next posedge
     u6 alu_op;
     u26 jump_index;
     u32 alu_result, writeback_data;
@@ -32,6 +32,12 @@ module core
     u32 pc_selected;
     u32 src_a, src_b, signimm; //sign-extended imm
     u32 rd2;
+
+    fetch_data_t fetch_data_reg;
+    decode_data_t decode_data_reg;
+    execute_data_t execute_data_reg;
+    memory_data_t memory_data_reg;
+    writeback_data_t writeback_data_reg;
 
     assign data_addr = alu_result;
     assign instr_addr = pc;
@@ -43,7 +49,7 @@ module core
     //delay_slot = 0;
     //
     
-    always_ff @(posedge clk/*, posedge reset*/) begin
+    /*always_ff @(posedge clk) begin
         branch_tmp = branch_address;
         if(reset) begin
             pc <= 32'b0;
@@ -59,7 +65,15 @@ module core
                 if(branch && equal || jump) delay_slot <= 1;
             end
         end
-    end
+    end*/
+    fetch fetch(
+        .clk(clk), .reset(reset),
+        .instruction(instruction),
+        .pc_nxt(pc_nxt),
+        .branch_judge(branch && equal ||jump),
+        .branch_address(branch_address),
+        .fetch_data(fetch_data_reg)
+    );
 
     decode decode(
         .instruction(instruction),
