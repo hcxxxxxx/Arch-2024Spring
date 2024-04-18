@@ -8,8 +8,8 @@ module fetch
         input logic clk, reset,
         input u32 instruction,
         input u32 pc_nxt,
-        input logic branch_judge,
-        input u32 branch_address,
+        input logic branch_judge, jump_judge,
+        input u32 branch_address, jump_address,
         output fetch_data_t fetch_data_reg
     );
 
@@ -18,6 +18,7 @@ module fetch
 
     assign fetch_data_reg.instruction = instruction;
     assign fetch_data_reg.pc = pc_fetch;
+    //assign fetch_data_reg.delay_slot = delay_slot;
 
     always_ff @(posedge clk) begin
         //branch_tmp = branch_address;
@@ -27,12 +28,13 @@ module fetch
         end
         else begin
             if(delay_slot) begin
-                pc_fetch <= branch_address;
                 delay_slot <= 1'b0;
+                if(branch_judge) pc_fetch <= branch_address;
+                else pc_fetch <= jump_address;
             end
             else begin
                 pc_fetch <= pc_nxt;
-                if(branch_judge) delay_slot <= 1'b1;
+                if(branch_judge || jump_judge) delay_slot <= 1'b1;
             end
         end
     end

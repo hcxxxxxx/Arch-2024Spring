@@ -27,6 +27,9 @@ package pipes;
     parameter u6 F6_J = 6'b000010;
     parameter u6 F6_BEQ = 6'b000100;
 
+    parameter u1 E = 1'b0;
+    parameter u1 M = 1'b1;
+
 /* Define pipeline structures here */
 
     /*typedef enum logic [2:0] {
@@ -38,25 +41,46 @@ package pipes;
     } decode_op_t;*/
 
     typedef struct packed {
-        u32 instruction;
-        u32 pc;
+        u32 pc, instruction;
+        logic delay_slot;
     } fetch_data_t;
 
     typedef struct packed {
-
+        u32 pc, instruction;
+        u6 op, func;
+        creg_addr_t rs, rt, rd;
+        u32 signimm;
+        //u26 jump_index;
+        u32 jump_address;
+        logic delay_slot, jump;
     } decode_data_t;
 
     typedef struct packed {
-
+        u32 pc, instruction;
+        logic mem_to_reg, mem_write, branch, alu_src, reg_write, reg_dst, equal;
+        u6 alu_op;
+        u32 branch_address;
+        u32 alu_result;
+        creg_addr_t rs, rt, rd;
     } execute_data_t;
 
     typedef struct packed {
-
+        u32 pc, instruction;
+        logic mem_to_reg, reg_dst, reg_write;
+        u32 alu_result;
+        creg_addr_t rs, rt, rd;
     } memory_data_t;
 
     typedef struct packed {
-
+        u32 pc, instruction;
+        logic reg_dst, reg_write;
+        u32 alu_result, writeback_data;
+        creg_addr_t rs, rt, rd;
     } writeback_data_t;
+
+    typedef struct packed {
+        logic decode_enable, execute_enable, memory_enable, writeback_enable, m_or_e;
+    } state_enable_t;
 
 endpackage
 
