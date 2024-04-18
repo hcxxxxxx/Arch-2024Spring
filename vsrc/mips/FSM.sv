@@ -26,8 +26,14 @@ module FSM
     always_ff @(posedge clk, posedge reset) begin
         if(reset) begin
             state <= F_;
-            next_state <= D_;
-            state_enable <= '0;
+            //next_state <= D_;
+            state_enable.fetch_enable <= 1'b1;
+            state_enable.decode_enable <= 1'b0;
+            state_enable.execute_enable <= 1'b0;
+            state_enable.memory_enable <= 1'b0;
+            state_enable.writeback_enable <= 1'b0;
+            state_enable.m_or_e <= 1'b0;
+            next_state_enable.fetch_enable <= 1'b0;
             next_state_enable.decode_enable <= 1'b1;
             next_state_enable.execute_enable <= 1'b0;
             next_state_enable.memory_enable <= 1'b0;
@@ -85,6 +91,7 @@ module FSM
 
             default: next_state = F_;
         endcase
+        next_state_enable.fetch_enable = (next_state == F_);
         next_state_enable.decode_enable = (next_state == D_);
         next_state_enable.execute_enable = (next_state == E_);
         next_state_enable.memory_enable = (next_state == M_);

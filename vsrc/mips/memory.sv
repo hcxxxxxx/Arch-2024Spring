@@ -17,7 +17,7 @@ module memory
 
     always_ff @(posedge clk)begin
         if(memory_enable) dataEreg <= execute_data_reg;
-        else dataEreg <= '0;
+        else ;//dataEreg <= '0;
     end
 
     assign memory_data_reg.pc = dataEreg.pc;

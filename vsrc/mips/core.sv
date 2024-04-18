@@ -35,8 +35,9 @@ module core
 
     state_enable_t state_enable;
 
-    logic decode_enable, execute_enable, memory_enable, writeback_enable, m_or_e;
+    logic fetch_enable, decode_enable, execute_enable, memory_enable, writeback_enable, m_or_e;
 
+    assign fetch_enable = state_enable.fetch_enable;
     assign decode_enable = state_enable.decode_enable;
     assign execute_enable = state_enable.execute_enable;
     assign memory_enable = state_enable.memory_enable;
@@ -80,7 +81,7 @@ module core
     );
 
     fetch fetch(
-        .clk(clk), .reset(reset),
+        .clk(clk), .reset(reset), .fetch_enable(fetch_enable),
         .instruction(instruction),
         .pc_nxt(pc_nxt),
         .branch_judge(execute_data_reg.branch && execute_data_reg.equal),
@@ -119,6 +120,12 @@ module core
         .src_a(src_a), .rd2(rd2),
         .decode_data_reg(decode_data_reg),
         .execute_data_reg(execute_data_reg)
+    );
+
+    memory memory(
+        .clk(clk), .memory_enable(memory_enable),
+        .execute_data_reg(execute_data_reg),
+        .memory_data_reg(memory_data_reg)
     );
     
     writeback writeback(
