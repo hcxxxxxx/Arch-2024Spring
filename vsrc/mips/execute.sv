@@ -66,6 +66,8 @@ module execute
     assign execute_data_reg.rs = dataDreg.rs;
     assign execute_data_reg.rt = dataDreg.rt;
     assign execute_data_reg.rd = dataDreg.rd;
+    assign execute_data_reg.pc = dataDreg.pc;
+    assign execute_data_reg.instruction = dataDreg.instruction;
 
     alu alu(
         .alu_op(execute_data_reg.alu_op),

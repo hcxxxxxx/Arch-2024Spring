@@ -33,12 +33,12 @@ module FSM
             state_enable.memory_enable <= 1'b0;
             state_enable.writeback_enable <= 1'b0;
             state_enable.m_or_e <= 1'b0;
-            next_state_enable.fetch_enable <= 1'b0;
+            /*next_state_enable.fetch_enable <= 1'b0;
             next_state_enable.decode_enable <= 1'b1;
             next_state_enable.execute_enable <= 1'b0;
             next_state_enable.memory_enable <= 1'b0;
             next_state_enable.writeback_enable <= 1'b0;
-            next_state_enable.m_or_e <= 1'b0;
+            next_state_enable.m_or_e <= 1'b0;*/
         end
         else begin
             state <= next_state;
