@@ -38,7 +38,7 @@ package pipes;
     } decode_op_t;*/
 
     typedef struct {
-
+        
     } fetch_data_t;
 
     typedef struct {
