@@ -48,7 +48,8 @@ module core
     assign instr_addr = pc;
     assign pc_nxt = pc + 4;
     assign write_data = rd2;
-    //assign branch_tmp = branch_address;
+
+    assign write_enable = execute_data_reg.mem_write;
     
     //
     //delay_slot = 0;
