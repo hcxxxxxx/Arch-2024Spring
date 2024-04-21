@@ -18,10 +18,12 @@ module decode
     u16 imm;
 
     always_ff @(posedge clk) begin
-        if(decode_enable) dataFreg <= fetch_data_reg;
-        if(decode_enable && fetch_data_reg.jump == 1'b1) decode_data_reg.jump <= 1'b1;
-        else decode_data_reg.jump <= 1'b0;
-            //decode_data_reg.jump <= (fetch_data_reg.jump == 1'b1);
+        if(decode_enable) begin
+            dataFreg <= fetch_data_reg;
+        end
+        else begin
+            decode_data_reg.jump <= fetch_data_reg.jump;
+        end
         //else dataFreg <= '0;
     end
 
