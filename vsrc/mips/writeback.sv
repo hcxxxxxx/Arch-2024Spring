@@ -29,8 +29,8 @@ module writeback
             endcase
         end
         else begin
-            //dataEreg <= '0;
-            //dataMreg <= '0;
+            dataEreg <= '0;
+            dataMreg <= '0;
         end
     end
 

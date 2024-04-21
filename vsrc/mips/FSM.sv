@@ -18,14 +18,14 @@ module FSM
 
     u3 state, next_state;
     u6 op, func;
-    state_enable_t next_state_enable;
+    //state_enable_t next_state_enable;
 
     assign op = instruction[31:26];
     assign func = instruction[5:0];
 
     always_ff @(posedge clk, posedge reset) begin
         if(reset) begin
-            state <= F_;
+            //next_state <= F_;
             //next_state <= D_;
             state_enable.fetch_enable <= 1'b1;
             state_enable.decode_enable <= 1'b0;
@@ -42,7 +42,7 @@ module FSM
         end
         else begin
             state <= next_state;
-            state_enable <= next_state_enable;
+            //state_enable <= next_state_enable;
         end
     end
 
@@ -67,9 +67,10 @@ module FSM
             E_: begin
                 case(op)
                     F6_BEQ: next_state = F_;
-                    F6_R_TYPE: begin
+                    F6_R_TYPE, F6_ADDI: begin
                         next_state = W_;
-                        next_state_enable.m_or_e = E;
+                        //next_state_enable.m_or_e = E;
+                        state_enable.m_or_e = E;
                     end
                     F6_SW, F6_LW: next_state = M_;
                     default: next_state = F_;
@@ -81,7 +82,8 @@ module FSM
                     F6_SW: next_state = F_;
                     F6_LW: begin
                         next_state = W_;
-                        next_state_enable.m_or_e = M;
+                        //next_state_enable.m_or_e = M;
+                        state_enable.m_or_e = M;
                     end
                     default: next_state = F_;
                 endcase
@@ -91,11 +93,16 @@ module FSM
 
             default: next_state = F_;
         endcase
-        next_state_enable.fetch_enable = (next_state == F_);
-        next_state_enable.decode_enable = (next_state == D_);
-        next_state_enable.execute_enable = (next_state == E_);
-        next_state_enable.memory_enable = (next_state == M_);
-        next_state_enable.writeback_enable = (next_state == W_);
+        //next_state_enable.fetch_enable = (next_state == F_);
+        //next_state_enable.decode_enable = (next_state == D_);
+        //next_state_enable.execute_enable = (next_state == E_);
+        //next_state_enable.memory_enable = (next_state == M_);
+        //next_state_enable.writeback_enable = (next_state == W_);
+        state_enable.fetch_enable = (next_state == F_);
+        state_enable.decode_enable = (next_state == D_);
+        state_enable.execute_enable = (next_state == E_);
+        state_enable.memory_enable = (next_state == M_);
+        state_enable.writeback_enable = (next_state == W_);
     end
 
 endmodule

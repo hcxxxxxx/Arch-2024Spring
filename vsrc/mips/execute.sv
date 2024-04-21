@@ -15,7 +15,9 @@ module execute
         input logic clk, execute_enable,
         input u32 src_a, rd2,
         input decode_data_t decode_data_reg,
-        output execute_data_t execute_data_reg
+        output execute_data_t execute_data_reg,
+        output u32 branch_address,
+        output logic branch_judge
     );
     
     decode_data_t dataDreg;
@@ -23,8 +25,12 @@ module execute
     logic equal;
 
     always_ff @(posedge clk) begin
-        if(execute_enable) dataDreg <= decode_data_reg;
-        else ;//dataDreg <= '0;
+        if(execute_enable) begin
+            dataDreg <= decode_data_reg;
+            branch_address <= decode_data_reg.pc + decode_data_reg.signimm;
+            branch_judge <= (decode_data_reg.op == F6_BEQ) && equal;
+        end
+        else dataDreg <= '0;
     end
 
     always_comb begin
