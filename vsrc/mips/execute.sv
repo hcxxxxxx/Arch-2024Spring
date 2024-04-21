@@ -14,6 +14,7 @@ module execute
         output u32 branch_address*/
         input logic clk, execute_enable,
         input u32 src_a, rd2,
+        input u32 instruction,
         input decode_data_t decode_data_reg,
         output execute_data_t execute_data_reg,
         output u32 branch_address,
@@ -25,10 +26,11 @@ module execute
     logic equal;
 
     always_ff @(posedge clk) begin
+        branch_judge <= (decode_data_reg.op == F6_BEQ) && equal;
         if(execute_enable) begin
             dataDreg <= decode_data_reg;
             branch_address <= decode_data_reg.pc + decode_data_reg.signimm;
-            branch_judge <= (decode_data_reg.op == F6_BEQ) && equal;
+            //branch_judge <= (decode_data_reg.op == F6_BEQ) && equal;
         end
         else dataDreg <= '0;
     end

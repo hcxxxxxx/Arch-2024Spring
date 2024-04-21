@@ -120,6 +120,7 @@ module core
         .branch_address(branch_address)*/
         .clk(clk), .execute_enable(execute_enable),
         .src_a(src_a), .rd2(rd2),
+        .instruction(instruction),
         .decode_data_reg(decode_data_reg),
         .execute_data_reg(execute_data_reg),
         .branch_address(branch_address),

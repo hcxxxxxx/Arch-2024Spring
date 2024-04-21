@@ -19,6 +19,10 @@ module decode
 
     always_ff @(posedge clk) begin
         if(decode_enable) dataFreg <= fetch_data_reg;
+        if(decode_enable && fetch_data_reg.jump == 1'b1) decode_data_reg.jump <= 1'b1;
+        else decode_data_reg.jump <= 1'b0;
+            //decode_data_reg.jump <= (fetch_data_reg.jump == 1'b1);
+        //else dataFreg <= '0;
     end
 
     assign imm = dataFreg.instruction[15:0];
@@ -34,7 +38,7 @@ module decode
     //assign decode_data_reg.jump_index = dataFreg.instruction[25:0];
     assign decode_data_reg.jump_address = {dataFreg.pc[31:28], dataFreg.instruction[25:0], 2'b00};
     //assign decode_data_reg.delay_slot = dataFreg.delay_slot;
-    assign decode_data_reg.jump = (dataFreg.instruction[31:26] == F6_J);
+    //assign decode_data_reg.jump = (dataFreg.instruction[31:26] == F6_J);
 
     always_comb begin
         if(dataFreg.instruction[31:26] == F6_BEQ) decode_data_reg.signimm = {{14{imm[15]}}, imm[15:0], 2'b00};

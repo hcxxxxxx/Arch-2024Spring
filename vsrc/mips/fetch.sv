@@ -18,6 +18,7 @@ module fetch
 
     assign fetch_data_reg.instruction = instruction;
     assign fetch_data_reg.pc = pc_fetch;
+    assign fetch_data_reg.jump = (instruction[31:26] == F6_J);
     //assign fetch_data_reg.delay_slot = delay_slot;
 
     always_ff @(posedge clk) begin
@@ -31,7 +32,8 @@ module fetch
                 if(delay_slot) begin
                     delay_slot <= 1'b0;
                     if(branch_judge) pc_fetch <= branch_address;
-                    else pc_fetch <= jump_address;
+                    else if(jump_judge) pc_fetch <= jump_address;
+                    else pc_fetch <= pc_nxt;
                 end
                 else begin
                     pc_fetch <= pc_nxt;
