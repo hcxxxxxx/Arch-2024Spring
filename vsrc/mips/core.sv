@@ -16,15 +16,6 @@ module core
     );
 
     /* Wires */
-    //u6 op, func; //func for r-type instructions
-    //creg_addr_t rs, rt, rd, wa;
-    //u16 imm;
-    //logic mem_to_reg, branch, equal, jump, alu_src, reg_write, reg_dst;
-    //logic delay_slot = 0; //=1 if branch on next posedge
-    //u6 alu_op;
-    //u26 jump_index;
-    //u32 alu_result, writeback_data;
-    //u32 branch_address, branch_tmp;// branch address register
     u32 pc, pc_nxt, src_a, rd2;
     u32 branch_address, jump_address;
 
@@ -53,28 +44,6 @@ module core
     assign write_data = rd2;
 
     assign write_enable = execute_data_reg.mem_write;
-    
-    //
-    //delay_slot = 0;
-    //
-    
-    /*always_ff @(posedge clk) begin
-        branch_tmp = branch_address;
-        if(reset) begin
-            pc <= 32'b0;
-            delay_slot <= 0;
-        end
-        else begin
-            if(delay_slot) begin
-                pc <= branch_address;
-                delay_slot <= 0;
-            end
-            else begin
-                pc <= pc_nxt;
-                if(branch && equal || jump) delay_slot <= 1;
-            end
-        end
-    end*/
 
     FSM FSM(
         .clk(clk), .reset(reset),
@@ -92,11 +61,6 @@ module core
     );
 
     decode decode(
-        /*.instruction(instruction),
-        .op(op), .func(func),
-        .rs(rs), .rt(rt), .rd(rd),
-        .imm(imm),
-        .jump_index(jump_index)*/
         .clk(clk), .decode_enable(decode_enable),
         .fetch_data_reg(fetch_data_reg),
         .decode_data_reg(decode_data_reg),
@@ -104,20 +68,6 @@ module core
     );
 
     execute execute(
-        /*.op(op), .func(func),
-        .jump_index(jump_index),
-        .branch_tmp(branch_tmp),
-        .pc(pc), .signimm(signimm),
-        .delay_slot(delay_slot),
-        .mem_to_reg(mem_to_reg),
-        .mem_write(write_enable),
-        .branch(branch),
-        .alu_src(alu_src),
-        .reg_write(reg_write),
-        .reg_dst(reg_dst),
-        .jump(jump),
-        .alu_op(alu_op),
-        .branch_address(branch_address)*/
         .clk(clk), .execute_enable(execute_enable),
         .src_a(src_a), .rd2(rd2),
         .instruction(instruction),
@@ -134,10 +84,6 @@ module core
     );
     
     writeback writeback(
-        /*.mem_to_reg(mem_to_reg),
-        .alu_result(alu_result),
-        .read_data(read_data),
-        .writeback_data(writeback_data)*/
         .clk(clk), .writeback_enable(writeback_enable),
         .m_or_e(m_or_e),
         .read_data(read_data),
@@ -145,32 +91,6 @@ module core
         .memory_data_reg(memory_data_reg),
         .writeback_data_reg(writeback_data_reg)
     );
-
-    /*alu alu(
-        .alu_op(alu_op),
-        .src_a(src_a),
-        .src_b(src_b),
-        .equal(equal),
-        .alu_result(alu_result)
-    );*/
-
-    /*sign_extend sign_extend(
-        .op(op),
-        .imm(imm), .signimm(signimm)
-    );*/
-
-    /*regdst regdst(
-        .reg_dst(reg_dst),
-        .rt(rt), .rd(rd),
-        .wa(wa)
-    );*/
-
-    /*alusrc alusrc(
-        .alu_src(alu_src),
-        .rd2(rd2),
-        .signimm(signimm),
-        .src_b(src_b)
-    );*/
     
     regfile regfile(
         .clk(clk), .reset(reset),

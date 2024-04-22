@@ -4,9 +4,6 @@
 module writeback
     import common::*;
     import pipes::*;(
-        /*input logic mem_to_reg,
-        input u32 alu_result, read_data,
-        output u32 writeback_data*/
         input logic clk, writeback_enable, m_or_e,
         input u32 read_data,
         input execute_data_t execute_data_reg,

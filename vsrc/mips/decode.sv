@@ -4,11 +4,6 @@
 module decode
     import common::*;
     import pipes::*;(
-        /*input word_t instruction,
-        output u6 op, func,
-        output creg_addr_t rs, rt, rd,
-        output u16 imm,
-        output u26 jump_index*/
         input logic clk, decode_enable,
         input fetch_data_t fetch_data_reg,
         output decode_data_t decode_data_reg,
@@ -31,7 +26,7 @@ module decode
     assign decode_data_reg.pc = dataFreg.pc;
     assign decode_data_reg.instruction = dataFreg.instruction;
     assign decode_data_reg.op = dataFreg.instruction[31:26];
-    assign decode_data_reg.func = dataFreg.instruction[5:0]; //for r-type instructions
+    assign decode_data_reg.func = dataFreg.instruction[5:0];
     assign decode_data_reg.rs = dataFreg.instruction[25:21];
     assign decode_data_reg.rt = dataFreg.instruction[20:16];
     assign decode_data_reg.rd = dataFreg.instruction[15:11];

@@ -32,14 +32,6 @@ package pipes;
 
 /* Define pipeline structures here */
 
-    /*typedef enum logic [2:0] {
-        ALU_ADD, ALU_SUB, ALU_AND, ALU_OR, ALU_SLT, ALU_ADDI
-    } alu_func_t;
-
-    typedef enum logic [3:0] {
-        NOP, ADD, SUB, AND, OR, SLT, ADDI, LW, SW, J, BEQ
-    } decode_op_t;*/
-
     typedef struct packed {
         u32 pc, instruction;
         logic delay_slot;

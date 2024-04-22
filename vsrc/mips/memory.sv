@@ -4,10 +4,6 @@
 module memory
     import common::*;
     import pipes::*;(
-        /*input logic clk,
-        input logic mem_write,
-        input u32 alu_result, write_data,
-        output u32 read_data*/
         input logic clk, memory_enable,
         input execute_data_t execute_data_reg,
         output memory_data_t memory_data_reg
