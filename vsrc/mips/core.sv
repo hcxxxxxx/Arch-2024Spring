@@ -26,6 +26,7 @@ module core
     //u32 alu_result, writeback_data;
     //u32 branch_address, branch_tmp;// branch address register
     u32 pc, pc_nxt, src_a, rd2;
+    u32 branch_address, jump_address;
 
     fetch_data_t fetch_data_reg;
     decode_data_t decode_data_reg;
@@ -36,6 +37,7 @@ module core
     state_enable_t state_enable;
 
     logic fetch_enable, decode_enable, execute_enable, memory_enable, writeback_enable, m_or_e;
+    logic branch_judge;
 
     assign fetch_enable = state_enable.fetch_enable;
     assign decode_enable = state_enable.decode_enable;
@@ -84,9 +86,8 @@ module core
         .clk(clk), .reset(reset), .fetch_enable(fetch_enable),
         .instruction(instruction),
         .pc_nxt(pc_nxt),
-        .branch_judge(execute_data_reg.branch && execute_data_reg.equal),
-        .jump_judge(decode_data_reg.jump),
-        .branch_address(execute_data_reg.branch_address), .jump_address(decode_data_reg.jump_address),
+        .branch_judge(branch_judge),
+        .branch_address(branch_address), .jump_address(jump_address),
         .fetch_data_reg(fetch_data_reg)
     );
 
@@ -98,7 +99,8 @@ module core
         .jump_index(jump_index)*/
         .clk(clk), .decode_enable(decode_enable),
         .fetch_data_reg(fetch_data_reg),
-        .decode_data_reg(decode_data_reg)
+        .decode_data_reg(decode_data_reg),
+        .jump_address(jump_address)
     );
 
     execute execute(
@@ -118,8 +120,11 @@ module core
         .branch_address(branch_address)*/
         .clk(clk), .execute_enable(execute_enable),
         .src_a(src_a), .rd2(rd2),
+        .instruction(instruction),
         .decode_data_reg(decode_data_reg),
-        .execute_data_reg(execute_data_reg)
+        .execute_data_reg(execute_data_reg),
+        .branch_address(branch_address),
+        .branch_judge(branch_judge)
     );
 
     memory memory(
@@ -172,7 +177,7 @@ module core
         .ra1(writeback_data_reg.rs), .ra2(writeback_data_reg.rt),
         .rd1(src_a), .rd2(rd2),
         .wa(writeback_data_reg.reg_dst ? decode_data_reg.rd : decode_data_reg.rt),
-        .wd(writeback_data),
+        .wd(writeback_data_reg.writeback_data),
         .we(writeback_data_reg.reg_write)
     );
 

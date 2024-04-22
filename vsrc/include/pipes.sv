@@ -42,7 +42,8 @@ package pipes;
 
     typedef struct packed {
         u32 pc, instruction;
-        logic delay_slot;        
+        logic delay_slot;
+        logic jump;
     } fetch_data_t;
 
     typedef struct packed {
@@ -50,9 +51,6 @@ package pipes;
         u6 op, func;
         creg_addr_t rs, rt, rd;
         u32 signimm;
-        //u26 jump_index;
-        u32 jump_address;
-        logic delay_slot, jump;
     } decode_data_t;
 
     typedef struct packed {
