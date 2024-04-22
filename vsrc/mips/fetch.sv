@@ -5,7 +5,7 @@
 module fetch
     import common::*;
     import pipes::*;(
-        input logic clk, reset,
+        input logic clk, reset, fetch_enable,
         input u32 instruction,
         input u32 pc_nxt,
         input logic branch_judge, jump_judge,
@@ -27,14 +27,16 @@ module fetch
             delay_slot <= 1'b0;
         end
         else begin
-            if(delay_slot) begin
-                delay_slot <= 1'b0;
-                if(branch_judge) pc_fetch <= branch_address;
-                else pc_fetch <= jump_address;
-            end
-            else begin
-                pc_fetch <= pc_nxt;
-                if(branch_judge || jump_judge) delay_slot <= 1'b1;
+            if(fetch_enable) begin
+                if(delay_slot) begin
+                    delay_slot <= 1'b0;
+                    if(branch_judge) pc_fetch <= branch_address;
+                    else pc_fetch <= jump_address;
+                end
+                else begin
+                    pc_fetch <= pc_nxt;
+                    if(branch_judge || jump_judge) delay_slot <= 1'b1;
+                end
             end
         end
     end

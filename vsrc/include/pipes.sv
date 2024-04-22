@@ -79,7 +79,7 @@ package pipes;
     } writeback_data_t;
 
     typedef struct packed {
-        logic decode_enable, execute_enable, memory_enable, writeback_enable, m_or_e;
+        logic fetch_enable, decode_enable, execute_enable, memory_enable, writeback_enable, m_or_e;
     } state_enable_t;
 
 endpackage

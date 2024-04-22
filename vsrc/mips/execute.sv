@@ -24,7 +24,7 @@ module execute
 
     always_ff @(posedge clk) begin
         if(execute_enable) dataDreg <= decode_data_reg;
-        else dataDreg <= '0;
+        else ;//dataDreg <= '0;
     end
 
     always_comb begin
@@ -37,7 +37,7 @@ module execute
             execute_data_reg.branch_address = 32'b0;
             execute_data_reg.alu_op = dataDreg.func;
             execute_data_reg.reg_dst = 1'b1;
-            execute_data_reg.jump = 1'b0;
+            //execute_data_reg.jump = 1'b0;
             execute_data_reg.reg_write = (dataDreg.func != F6_NOP);
         end
         else begin
@@ -48,14 +48,14 @@ module execute
             execute_data_reg.alu_op = dataDreg.op;
             execute_data_reg.reg_dst = 1'b0;
             execute_data_reg.reg_write = (dataDreg.op == F6_ADDI || dataDreg.op == F6_LW);
-            execute_data_reg.jump = (dataDreg.op == F6_J);
-            if(dataDreg.op == F6_J && ! dataDreg.delay_slot) begin
+            //execute_data_reg.jump = (dataDreg.op == F6_J);
+            /*if(dataDreg.op == F6_J && ! dataDreg.delay_slot) begin
                 execute_data_reg.branch_address = {dataDreg.pc[31:28], dataDreg.jump_index[25:0], 2'b00}; //from jump_index to legal address
             end
-            else if(dataDreg.op == F6_BEQ && ! dataDreg.delay_slot) begin
+            else if(dataDreg.op == F6_BEQ && ! dataDreg.delay_slot) begin*/
                 execute_data_reg.branch_address = dataDreg.pc + dataDreg.signimm;
-            end
-            else execute_data_reg.branch_address = 32'b0;
+            /*end
+            else execute_data_reg.branch_address = 32'b0;*/
             //else branch_address = branch_tmp;
         end
     end
@@ -66,6 +66,8 @@ module execute
     assign execute_data_reg.rs = dataDreg.rs;
     assign execute_data_reg.rt = dataDreg.rt;
     assign execute_data_reg.rd = dataDreg.rd;
+    assign execute_data_reg.pc = dataDreg.pc;
+    assign execute_data_reg.instruction = dataDreg.instruction;
 
     alu alu(
         .alu_op(execute_data_reg.alu_op),
