@@ -26,7 +26,7 @@ module core
     //u32 alu_result, writeback_data;
     //u32 branch_address, branch_tmp;// branch address register
     u32 pc, pc_nxt, src_a, rd2;
-    u32 branch_address;
+    u32 branch_address, jump_address;
 
     fetch_data_t fetch_data_reg;
     decode_data_t decode_data_reg;
@@ -87,8 +87,7 @@ module core
         .instruction(instruction),
         .pc_nxt(pc_nxt),
         .branch_judge(branch_judge),
-        .jump_judge(decode_data_reg.jump),
-        .branch_address(branch_address), .jump_address(decode_data_reg.jump_address),
+        .branch_address(branch_address), .jump_address(jump_address),
         .fetch_data_reg(fetch_data_reg)
     );
 
@@ -100,7 +99,8 @@ module core
         .jump_index(jump_index)*/
         .clk(clk), .decode_enable(decode_enable),
         .fetch_data_reg(fetch_data_reg),
-        .decode_data_reg(decode_data_reg)
+        .decode_data_reg(decode_data_reg),
+        .jump_address(jump_address)
     );
 
     execute execute(

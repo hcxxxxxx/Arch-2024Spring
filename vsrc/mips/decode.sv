@@ -11,7 +11,8 @@ module decode
         output u26 jump_index*/
         input logic clk, decode_enable,
         input fetch_data_t fetch_data_reg,
-        output decode_data_t decode_data_reg
+        output decode_data_t decode_data_reg,
+        output u32 jump_address
     );
 
     fetch_data_t dataFreg;
@@ -20,9 +21,7 @@ module decode
     always_ff @(posedge clk) begin
         if(decode_enable) begin
             dataFreg <= fetch_data_reg;
-        end
-        else begin
-            decode_data_reg.jump <= fetch_data_reg.jump;
+            jump_address <= {dataFreg.pc[31:28], dataFreg.instruction[25:0], 2'b00};
         end
         //else dataFreg <= '0;
     end
@@ -36,11 +35,6 @@ module decode
     assign decode_data_reg.rs = dataFreg.instruction[25:21];
     assign decode_data_reg.rt = dataFreg.instruction[20:16];
     assign decode_data_reg.rd = dataFreg.instruction[15:11];
-    //assign decode_data_reg.imm = dataFreg.instruction[15:0];
-    //assign decode_data_reg.jump_index = dataFreg.instruction[25:0];
-    assign decode_data_reg.jump_address = {dataFreg.pc[31:28], dataFreg.instruction[25:0], 2'b00};
-    //assign decode_data_reg.delay_slot = dataFreg.delay_slot;
-    //assign decode_data_reg.jump = (dataFreg.instruction[31:26] == F6_J);
 
     always_comb begin
         if(dataFreg.instruction[31:26] == F6_BEQ) decode_data_reg.signimm = {{14{imm[15]}}, imm[15:0], 2'b00};
