@@ -20,7 +20,6 @@ module fetch
 
     assign fetch_data_reg.instruction = instruction;
     assign fetch_data_reg.pc = pc_fetch;
-    //assign branch = (instruction[31:26] == F6_BEQ);
 
     always_ff @(posedge clk) begin
         if(instruction[31:26] == F6_J) jump <= 1'b1;
