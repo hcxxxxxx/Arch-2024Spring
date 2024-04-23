@@ -9,6 +9,7 @@ module FSM
        output state_enable_t state_enable
     );
 
+    parameter RESET_ = 3'b000;
     parameter F_ = 3'b001;
     parameter D_ = 3'b010;
     parameter E_ = 3'b011;
@@ -23,18 +24,22 @@ module FSM
 
     always_ff @(posedge clk, posedge reset) begin
         if(reset) begin
-            state_enable.fetch_enable <= 1'b1;
+            /*state_enable.fetch_enable <= 1'b1;
             state_enable.decode_enable <= 1'b0;
             state_enable.execute_enable <= 1'b0;
             state_enable.memory_enable <= 1'b0;
             state_enable.writeback_enable <= 1'b0;
-            state_enable.m_or_e <= 1'b0;
+            state_enable.m_or_e <= 1'b0;*/
+          //next_state <= F_;
+          state <= RESET_;
         end
         else state <= next_state;
     end
 
     always_comb begin
         unique case(state)
+            RESET_: next_state = F_;
+            
             F_: begin
                 if(instruction == 32'b0) next_state = F_;
                 else next_state = D_;
@@ -79,12 +84,18 @@ module FSM
 
             default: next_state = F_;
         endcase
-        state_enable.fetch_enable = (next_state == F_);
+        /*state_enable.fetch_enable = (next_state == F_);
         state_enable.decode_enable = (next_state == D_);
         state_enable.execute_enable = (next_state == E_);
         state_enable.memory_enable = (next_state == M_);
-        state_enable.writeback_enable = (next_state == W_);
+        state_enable.writeback_enable = (next_state == W_);*/
     end
+    
+        assign state_enable.fetch_enable = (next_state == F_);
+        assign state_enable.decode_enable = (next_state == D_);
+        assign state_enable.execute_enable = (next_state == E_);
+        assign state_enable.memory_enable = (next_state == M_);
+        assign state_enable.writeback_enable = (next_state == W_);
 
 endmodule
 

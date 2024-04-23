@@ -5,9 +5,11 @@ module decode
     import common::*;
     import pipes::*;(
         input logic clk, decode_enable,
+        input u32 instruction,
         input fetch_data_t fetch_data_reg,
         output decode_data_t decode_data_reg,
-        output u32 jump_address
+        output u32 jump_address,
+        output logic jump_judge
     );
 
     fetch_data_t dataFreg;
@@ -15,8 +17,9 @@ module decode
 
     always_ff @(posedge clk) begin
         if(decode_enable) begin
+            jump_judge <= (fetch_data_reg.instruction[31:26] == F6_J);
             dataFreg <= fetch_data_reg;
-            jump_address <= {dataFreg.pc[31:28], dataFreg.instruction[25:0], 2'b00};
+            jump_address <= {fetch_data_reg.pc[31:28], fetch_data_reg.instruction[25:0], 2'b00};
         end
         //else dataFreg <= '0;
     end

@@ -28,7 +28,7 @@ module core
     state_enable_t state_enable;
 
     logic fetch_enable, decode_enable, execute_enable, memory_enable, writeback_enable, m_or_e;
-    logic branch_judge;
+    logic branch_judge, jump_judge;
 
     assign fetch_enable = state_enable.fetch_enable;
     assign decode_enable = state_enable.decode_enable;
@@ -55,16 +55,18 @@ module core
         .clk(clk), .reset(reset), .fetch_enable(fetch_enable),
         .instruction(instruction),
         .pc_nxt(pc_nxt),
-        .branch_judge(branch_judge),
+        .branch_judge(branch_judge), .jump_judge(jump_judge),
         .branch_address(branch_address), .jump_address(jump_address),
         .fetch_data_reg(fetch_data_reg)
     );
 
     decode decode(
         .clk(clk), .decode_enable(decode_enable),
+        .instruction(instruction),
         .fetch_data_reg(fetch_data_reg),
         .decode_data_reg(decode_data_reg),
-        .jump_address(jump_address)
+        .jump_address(jump_address),
+        .jump_judge(jump_judge)
     );
 
     execute execute(
