@@ -34,7 +34,6 @@ package pipes;
 
     typedef struct packed {
         u32 pc, instruction;
-        logic delay_slot;
         logic jump;
     } fetch_data_t;
 
