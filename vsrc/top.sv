@@ -11,9 +11,17 @@ module Top
     word_t read_data, write_data;
     u1 write_enable;
     
+    /* clock */
+    logic clk_25MHz;
+    clk_wiz_0 clk_wiz_inst (
+        .clk_in1(clk),
+        .clk_out1(clk_25MHz),
+        .reset(reset)
+    );
+
     /* instantiate a core */
     core core(
-        .clk(clk), .reset(reset),
+        .clk(clk_25MHz), .reset(reset),
         .instr_addr(pc), .instruction(instruction),
         .data_addr(data_addr), .write_enable(write_enable),
         .read_data(read_data), .write_data(write_data)
@@ -25,7 +33,7 @@ module Top
         .instruction(instruction)
     );
     dmem dmem(
-        .clk(clk),
+        .clk(clk_25MHz),
         .we(write_enable),
         .addr(data_addr),
         .write_data(write_data),
@@ -35,7 +43,7 @@ module Top
     // for test
     logic [1:0] prev_result;
 
-    always_ff @(posedge clk) begin
+    always_ff @(posedge clk_25MHz) begin
         if (reset) begin
             result <= 2'b00;
             prev_result <= 2'b00;
