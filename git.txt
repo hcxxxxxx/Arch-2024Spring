@@ -1,8 +1,14 @@
 git push <origin> --delete <branch>                 # To delete a remote branch
-git branch -d <branch>                              # To delete a local branch
+git branch -D <branch>                              # To delete a local branch
 
 git add .
 git commit -m "<Information>"
 git push <origin> <branch>                          # To update remote repository
 
+git checkout <local branch>                         # To switch to an existing local branch
+
+git checkout -b <local branch>                      # To create a new local branch and switch to it
+
 git pull <origin> <branch>                          # To update local repository
+
+git clone -b <remote branch> <https://github.com/...>   #To clone a specific remote branch of a repository
