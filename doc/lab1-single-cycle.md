@@ -4,13 +4,6 @@
 
 运算指令：add sub and or slt addi；访存指令：lw sw；分支指令：j beq；共10条。
 
-本次实验的代码仓库位于[Arch-2024Spring](https://github.com/JoyBoy-Su/Arch-2024Spring)的lab1分支，在开始本次实验前，建议使用以下指令创建新的分支进行开发，避免破坏实验环境：
-
-```shell
-$ git switch lab1
-$ git checkout -b lab1-dev
-```
-
 ## 单周期CPU
 
 ### 1 架构寄存器
