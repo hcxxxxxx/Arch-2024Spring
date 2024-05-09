@@ -16,21 +16,69 @@ module core
     );
     
     /* instruction */
-    u32 pc, pc_next;
+    u32 pc, pc_nxt, src_a, rd2;
+    u32 branch_address, jump_address;
+    logic branch_judge, jump_judge;
+
+    creg_addr_t wb_rs, wb_rt, wb_rd;
+    logic wb_reg_dst, wb_reg_write;
+    u32 writeback_data;
+
+    f_d_reg_t f_d_reg;
+    d_e_reg_t d_e_reg;
+    e_m_reg_t e_m_reg;
+    m_w_reg_t m_w_reg;
+
     assign instr_addr = pc;
+    assign data_addr = e_m_reg.alu_result;
 
-    /* TODO: add your design here. */
+    assign pc = f_d_reg.pc;
+    assign pc_nxt = pc + 4;
+    assign write_data = rd2;
+    assign write_enable = e_m_reg.mem_write;
 
-    /* Don't forget to drive the output signal. */
+    fetch fetch(
+        .clk(clk), .reset(reset),
+        .instruction(instruction),
+        .branch_judge(branch_judge),
+        .jump_judge(jump_judge),
+        .branch_address(branch_address),
+        .jump_address(jump_address),
+        .pc_plus_4(pc + 4),
+        .f_d_reg(f_d_reg)
+    );
 
-    /* TODO: wire the regfile */
+    decode decode(
+
+    );
+
+    execute execute(
+
+    );
+
+    memory memory(
+
+    );
+
+    writeback writeback(
+
+    );
+
+    hazard hazard(
+
+    );
+
+    forward forward(
+
+    );
+
     regfile regfile(
         .clk(clk), .reset(reset),
-        .ra1(), .ra2(),
-        .rd1(), .rd2(),
-        .wa(),
-        .wd(),
-        .we()
+        .ra1(wb_rs), .ra2(wb_rt),
+        .rd1(src_a), .rd2(rd2),
+        .wa(wb_reg_dst ? wb_rd : wb_rt),
+        .wd(writeback_data),
+        .we(wb_reg_write)
     );
 
 endmodule

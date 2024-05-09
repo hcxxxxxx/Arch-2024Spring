@@ -20,6 +20,7 @@ package common;
 	// typedef logic[62:0] u63;
 	typedef logic[43:0] u44;
 	typedef logic[31:0] u32;
+	typedef logic[25:0] u26;
 	typedef logic[19:0] u20;
 	typedef logic[15:0] u16;
 	typedef logic[14:0] u15;
