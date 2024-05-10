@@ -20,7 +20,7 @@ module core
     u32 branch_address, jump_address;
     logic branch_judge, jump_judge;
 
-    //creg_addr_t fetch_rs, fetch_rt;
+    creg_addr_t wb_rt, wb_rd;
     logic wb_reg_dst, wb_reg_write;
     u32 writeback_data;
 
@@ -30,11 +30,11 @@ module core
     m_w_reg_t m_w_reg;
 
     assign instr_addr = pc;
-    assign data_addr = e_m_reg.alu_result;
+    assign data_addr = m_w_reg.alu_result;
 
     assign pc = f_d_reg.pc;
     assign pc_nxt = pc + 4;
-    assign write_data = rd2;
+    assign write_data = e_m_reg.rt_word;
     assign write_enable = e_m_reg.mem_write;
 
     fetch fetch(
@@ -59,15 +59,24 @@ module core
     );
 
     execute execute(
-
+        .clk(clk),
+        .d_e_reg(d_e_reg),
+        .e_m_reg(e_m_reg)
     );
 
     memory memory(
-
+        .clk(clk),
+        .e_m_reg(e_m_reg),
+        .m_w_reg(m_w_reg)
     );
 
     writeback writeback(
-
+        .clk(clk), .read_data(read_data),
+        .m_w_reg(m_w_reg),
+        .wb_reg_dst(wb_reg_dst),
+        .wb_reg_write(wb_reg_write),
+        .wb_rd(wb_rd), .wb_rt(wb_rt),
+        .writeback_data(writeback_data)
     );
 
     hazard hazard(

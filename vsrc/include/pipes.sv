@@ -74,7 +74,8 @@ package pipes;
         u32 pc, pc_plus_4;
         logic mem_to_reg, reg_dst, reg_write;
         u32 alu_result;
-        creg_addr_t rs, rt, rd;
+        creg_addr_t rt, rd;
+        //u32 rs_word, rt_word;
     } m_w_reg_t;
 
 endpackage
