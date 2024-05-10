@@ -17,6 +17,8 @@ module fetch
     assign f_d_reg.instruction = instruction;
     assign f_d_reg.pc = pc_fetch;
     assign f_d_reg.pc_plus_4 = pc_fetch + 4;
+    assign f_d_reg.rs = instruction[25:21];
+    assign f_d_reg.rt = instruction[20:16];
 
     always_ff @(posedge clk) begin
         if(reset) begin

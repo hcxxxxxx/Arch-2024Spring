@@ -20,7 +20,7 @@ module core
     u32 branch_address, jump_address;
     logic branch_judge, jump_judge;
 
-    creg_addr_t wb_rs, wb_rt, wb_rd;
+    //creg_addr_t fetch_rs, fetch_rt;
     logic wb_reg_dst, wb_reg_write;
     u32 writeback_data;
 
@@ -49,7 +49,13 @@ module core
     );
 
     decode decode(
-
+        .clk(clk), .f_d_reg(f_d_reg),
+        .rd1(src_a), .rd2(rd2),
+        .branch_judge(branch_judge),
+        .jump_judge(jump_judge),
+        .branch_address(branch_address),
+        .jump_address(jump_address),
+        .d_e_reg(d_e_reg)
     );
 
     execute execute(
@@ -74,7 +80,7 @@ module core
 
     regfile regfile(
         .clk(clk), .reset(reset),
-        .ra1(wb_rs), .ra2(wb_rt),
+        .ra1(f_d_reg.rs), .ra2(f_d_reg.rt),
         .rd1(src_a), .rd2(rd2),
         .wa(wb_reg_dst ? wb_rd : wb_rt),
         .wd(writeback_data),

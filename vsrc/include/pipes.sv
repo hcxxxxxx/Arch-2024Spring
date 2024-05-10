@@ -48,15 +48,17 @@ package pipes;
     typedef struct packed {
         u32 instruction;
         u32 pc, pc_plus_4;
+        creg_addr_t rs, rt;
     } f_d_reg_t;
 
     typedef struct packed {
         u32 instruction;
         u32 pc, pc_plus_4;
-        u32 rd1, rd2;
+        //u32 rd1, rd2;
         u16 imm16;
         u6 op, func;
         creg_addr_t rs, rt, rd;
+        u32 rs_word, rt_word;
     } d_e_reg_t;
 
     typedef struct packed {
