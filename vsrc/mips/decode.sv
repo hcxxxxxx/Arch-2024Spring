@@ -4,7 +4,7 @@
 module decode
     import common::*;
     import pipes::*;(
-        input clk,
+        input logic clk,
         input f_d_reg_t f_d_reg,
         input u32 src_a, rd2,
         output logic branch_judge, jump_judge,
@@ -33,6 +33,7 @@ module decode
     assign d_e_reg.rd = f_d.instruction[15:11];
     assign d_e_reg.rs_word = src_a;
     assign d_e_reg.rt_word = rd2;
+    assign d_e_reg.imm16 = imm16;
 
     always_comb begin
         if(src_a == rd2 && d_e_reg.op == F6_BEQ) begin
@@ -52,21 +53,6 @@ module decode
             jump_judge = 1'b0;
             jump_address = 32'b0;
         end
-    end
-
-endmodule
-
-module imm_extend
-    import common::*;
-    import pipes::*;(
-        input logic extop,
-        input u16 imm16,
-        output u32 imm32
-    );
-    
-    always_comb begin
-        if(extop == 1'b0) imm32 = {16'b0, imm16[15:0]};
-        else imm32 = {{16{imm16[15]}}, imm16[15:0]};
     end
 
 endmodule
