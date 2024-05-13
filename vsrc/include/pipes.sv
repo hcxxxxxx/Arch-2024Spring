@@ -48,10 +48,11 @@ package pipes;
 
     typedef struct packed {
         u32 pc_plus_4;
-        u32 signimm32, zeroimm32;
-        u6 op, func;
+        u32 zeroimm32, signimm32;
+        u32 rd1, rd2;
         creg_addr_t rs, rt, rd;
-        logic reg_write, mem_to_reg, mem_write, alu_op, alu_src, reg_dst, branch;
+        u6 alu_op;
+        logic reg_write, mem_to_reg, mem_write, alu_src, reg_dst, branch;
     } d_e_reg_t;
 
     typedef struct packed {
@@ -60,6 +61,7 @@ package pipes;
         creg_addr_t write_reg;
         u32 write_data;
         logic reg_write, mem_to_reg, mem_write, branch;
+        logic zero;
     } e_m_reg_t;
 
     typedef struct packed {

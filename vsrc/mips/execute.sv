@@ -43,24 +43,11 @@ module execute
     assign e_m_reg.pc_plus_4 = d_e.pc_plus_4;
     assign e_m_reg.instruction = d_e.instruction;
 
-    imm_extend zero_extend(.extop(1'b0), .imm16(d_e.imm16), .imm32(zeroimm32));
-    imm_extend sign_extend(.extop(1'b1), .imm16(d_e.imm16), .imm32(signimm32));
-    alu alu(.alu_op(d_e.func), .src_a(d_e.rs_word), .src_b(src_b), .alu_result(alu_result));
-
-endmodule
-
-module imm_extend
-    import common::*;
-    import pipes::*;(
-        input logic extop,
-        input u16 imm16,
-        output u32 imm32
-    );
-    
-    always_comb begin
-        if(extop == 1'b0) imm32 = {16'b0, imm16[15:0]};
-        else imm32 = {{16{imm16[15]}}, imm16[15:0]};
-    end
+    alu alu(.alu_op(d_e.func),
+            .src_a(d_e.rs_word),
+            .src_b(src_b),
+            .zero(e_m_reg.zero),
+            .alu_result(alu_result));
 
 endmodule
 

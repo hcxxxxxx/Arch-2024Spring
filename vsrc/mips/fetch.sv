@@ -4,23 +4,15 @@
 module fetch
     import common::*;
     import pipes::*;(
-        input logic clk, reset,
-        input u32 instruction,
-        input logic branch_judge, jump_judge,
-        input u32 branch_address, jump_address,
-        input u32 pc_plus_4,
+        input logic clk,
+        input u32 pc, instruction,
         output f_d_reg_t f_d_reg
     );
 
-    u32 pc_fetch;
-
     assign f_d_reg.instruction = instruction;
-    assign f_d_reg.pc = pc_fetch;
-    assign f_d_reg.pc_plus_4 = pc_fetch + 4;
-    assign f_d_reg.rs = instruction[25:21];
-    assign f_d_reg.rt = instruction[20:16];
+    assign f_d_reg.pc_plus_4 = pc + 4;
 
-    always_ff @(posedge clk) begin
+    /*always_ff @(posedge clk) begin
         if(reset) begin
             pc_fetch <= 32'b0;
         end
@@ -29,7 +21,15 @@ module fetch
             else if(jump_judge) pc_fetch <= jump_address;
             else pc_fetch <= pc_fetch + 4;
         end
-    end
+    end*/
+endmodule
+
+module pc_select
+    import common::*;
+    import pipes::*;(
+        
+    );
+
 endmodule
 
 `endif

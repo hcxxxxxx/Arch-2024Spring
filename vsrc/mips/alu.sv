@@ -6,11 +6,11 @@ module alu
     import pipes::*;(
         input u6 alu_op,
         input u32 src_a, src_b,
-        //output logic equal,
+        output logic zero,
         output u32 alu_result
     );
 
-    //assign equal = (src_a == src_b);
+    assign zero = (src_a == src_b);
 
     always_comb begin
         case (alu_op)

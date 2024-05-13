@@ -14,9 +14,14 @@ module core
         output word_t write_data,
         output u1 write_enable
     );
+
+    //wires of writeback
+    creg_addr_t write_reg;
+    u32 writeback_data;
+    logic reg_write, mem_to_reg, 
     
     /* instruction */
-    u32 pc, pc_nxt, src_a, rd2;
+    /*u32 pc, pc_nxt, src_a, rd2;
     u32 branch_address, jump_address;
     logic branch_judge, jump_judge;
 
@@ -35,16 +40,15 @@ module core
     assign pc = f_d_reg.pc;
     assign pc_nxt = pc + 4;
     assign write_data = e_m_reg.rt_word;
-    assign write_enable = e_m_reg.mem_write;
+    assign write_enable = e_m_reg.mem_write;*/
+
+    pc_select pc_select(
+
+    );
 
     fetch fetch(
-        .clk(clk), .reset(reset),
+        .clk(clk), .pc(pc),
         .instruction(instruction),
-        .branch_judge(branch_judge),
-        .jump_judge(jump_judge),
-        .branch_address(branch_address),
-        .jump_address(jump_address),
-        .pc_plus_4(pc + 4),
         .f_d_reg(f_d_reg)
     );
 
@@ -89,12 +93,11 @@ module core
 
     regfile regfile(
         .clk(clk), .reset(reset),
-        .ra1(f_d_reg.rs), .ra2(f_d_reg.rt),
-        .rd1(src_a), .rd2(rd2),
-        .wa(wb_reg_dst ? wb_rd : wb_rt),
+        .ra1(d_e_reg.rs), .ra2(d_e_reg.rt),
+        .rd1(rd1), .rd2(rd2),
+        .wa(write_reg),
         .wd(writeback_data),
-        //.we(wb_reg_write)
-        .we(wb_reg_write && clk)
+        .we(reg_write)
     );
 
 endmodule
