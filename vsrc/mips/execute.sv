@@ -34,7 +34,7 @@ module execute
         end
     end
 
-    assign src_b = e_m_reg.alu_src ? signimm32 : rd2;
+    assign src_b = e_m_reg.alu_src ? signimm32 : d_e.rt_word;
     assign e_m_reg.alu_result = alu_result;
     assign e_m_reg.rs = d_e.rs;
     assign e_m_reg.rt = d_e.rt;

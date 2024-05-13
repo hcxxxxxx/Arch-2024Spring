@@ -50,7 +50,7 @@ module core
 
     decode decode(
         .clk(clk), .f_d_reg(f_d_reg),
-        .rd1(src_a), .rd2(rd2),
+        .src_a(src_a), .rd2(rd2),
         .branch_judge(branch_judge),
         .jump_judge(jump_judge),
         .branch_address(branch_address),
@@ -93,7 +93,8 @@ module core
         .rd1(src_a), .rd2(rd2),
         .wa(wb_reg_dst ? wb_rd : wb_rt),
         .wd(writeback_data),
-        .we(wb_reg_write)
+        //.we(wb_reg_write)
+        .we(wb_reg_write && clk)
     );
 
 endmodule

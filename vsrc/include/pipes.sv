@@ -27,9 +27,6 @@ package pipes;
     parameter u6 F6_J = 6'b000010;
     parameter u6 F6_BEQ = 6'b000100;
 
-    //parameter u1 E = 1'b0;
-    //parameter u1 M = 1'b1;
-
 /* Define pipeline structures here */
 
     typedef struct packed {
@@ -42,40 +39,34 @@ package pipes;
         hazard_data_item_t decode;
         hazard_data_item_t execute;
         hazard_data_item_t memory;
-        //hazard_data_item_t writeback;
     } hazard_data_t;
 
     typedef struct packed {
         u32 instruction;
-        u32 pc, pc_plus_4;
-        creg_addr_t rs, rt;
+        u32 pc_plus_4;
     } f_d_reg_t;
 
     typedef struct packed {
-        u32 instruction;
-        u32 pc, pc_plus_4;
-        u16 imm16;
+        u32 pc_plus_4;
+        u32 signimm32, zeroimm32;
         u6 op, func;
         creg_addr_t rs, rt, rd;
-        u32 rs_word, rt_word;
+        logic reg_write, mem_to_reg, mem_write, alu_op, alu_src, reg_dst, branch;
     } d_e_reg_t;
 
     typedef struct packed {
-        u32 instruction;
-        u32 pc, pc_plus_4;
-        logic mem_to_reg, mem_write, alu_src, reg_write, reg_dst;
+        u32 pc_plus_4;
         u32 alu_result;
-        creg_addr_t rs, rt, rd;
-        u32 rs_word, rt_word;
+        creg_addr_t write_reg;
+        u32 write_data;
+        logic reg_write, mem_to_reg, mem_write, branch;
     } e_m_reg_t;
 
     typedef struct packed {
-        u32 instruction;
-        u32 pc, pc_plus_4;
-        logic mem_to_reg, reg_dst, reg_write;
+        logic mem_to_reg, reg_write;
         u32 alu_result;
-        creg_addr_t rt, rd;
-        //u32 rs_word, rt_word;
+        u32 write_data;
+        creg_addr_t write_reg;
     } m_w_reg_t;
 
 endpackage

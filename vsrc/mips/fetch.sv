@@ -27,7 +27,7 @@ module fetch
         else begin
             if(branch_judge) pc_fetch <= branch_address;
             else if(jump_judge) pc_fetch <= jump_address;
-            else pc_fetch <= pc_plus_4;
+            else pc_fetch <= pc_fetch + 4;
         end
     end
 endmodule

@@ -21,11 +21,11 @@ module memory
     assign m_w_reg.mem_to_reg = e_m.mem_to_reg;
     assign m_w_reg.reg_dst = e_m.reg_dst;
     assign m_w_reg.alu_result = e_m.alu_result;
-    assign m_w_reg.rs = e_m.rs;
+    //assign m_w_reg.rs = e_m.rs;
     assign m_w_reg.rt = e_m.rt;
     assign m_w_reg.rd = e_m.rd;
-    assign m_w_reg.rs_word = e_m.rs_word;
-    assign m_w_reg.rt_word = e_m.rt_word;
+    //assign m_w_reg.rs_word = e_m.rs_word;
+    //assign m_w_reg.rt_word = e_m.rt_word;
 
 endmodule
 
