@@ -36,12 +36,12 @@ module execute
             .zero(e_m_reg.zero),
             .alu_result(e_m_reg.alu_result));
 
-    Mux3 Mux3A(.in0(d_e.rd1), .in1(execute_forward_data.resultW),
-               .in2(execute_forward_data.aluoutM),
+    Mux3 Mux3A(.in0(d_e.rd1), .in1(execute_forward_data.result),
+               .in2(execute_forward_data.aluout),
                .Muxsel(execute_forward_data.forwardA),
                .out(src_a));
-    Mux3 Mux3B(.in0(d_e.rd2), .in1(execute_forward_data.resultW),
-               .in2(execute_forward_data.aluoutM),
+    Mux3 Mux3B(.in0(d_e.rd2), .in1(execute_forward_data.result),
+               .in2(execute_forward_data.aluout),
                .Muxsel(execute_forward_data.forwardB), .out(src_b1));
 
     Mux2 Mux2A(.in0(d_e.rt), .in1(d_e.rd), .Muxsel(d_e.reg_dst), .out(e_m_reg.write_reg));

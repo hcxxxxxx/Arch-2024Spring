@@ -27,18 +27,30 @@ module core
     //wires for decode
     u32 rd1, rd2;
 
-    //wires for writeback
-    creg_addr_t write_reg;
-    u32 writeback_data;
-    logic reg_write, mem_to_reg, 
+    //wires for execute & forward
+    execute_forward_data_t execute_forward_data;
+    assign execute_forward_data.aluout = aluoutM;
 
+    //wires for memory
+    u32 writedataM, aluoutM;
+    logic pcsrcM;
+
+    assign write_enable = e_m_reg.mem_write;
+    assign data_addr = aluoutM;
+    assign write_data = writedataM;
+    assign m_w_reg.read_data = read_data;
+
+    //wires for writeback
+    u32 resultW;
+    creg_addr_t write_reg;
+    logic reg_write;
+
+    //registers
     f_d_reg_t f_d_reg;
     d_e_reg_t d_e_reg;
     e_m_reg_t e_m_reg;
     m_w_reg_t m_w_reg;
 
-    execute_forward_data_t execute_forward_data;
-    
     /* instruction */
     /*u32 pc, pc_nxt, src_a, rd2;
     u32 branch_address, jump_address;
@@ -80,8 +92,6 @@ module core
 
     execute execute(
         .clk(clk),
-        .forwardA(forwardA),
-        .forwardB(forwardB),
         .d_e_reg(d_e_reg),
         .execute_forward_data(execute_forward_data),
         .e_m_reg(e_m_reg)
@@ -90,16 +100,18 @@ module core
     memory memory(
         .clk(clk),
         .e_m_reg(e_m_reg),
-        .m_w_reg(m_w_reg)
+        .m_w_reg(m_w_reg),
+        .aluoutM(aluoutM),
+        .writedataM(writedataM),
+        .pcsrcM(pcsrcM)
     );
 
     writeback writeback(
-        .clk(clk), .read_data(read_data),
+        .clk(clk),
         .m_w_reg(m_w_reg),
-        .wb_reg_dst(wb_reg_dst),
-        .wb_reg_write(wb_reg_write),
-        .wb_rd(wb_rd), .wb_rt(wb_rt),
-        .writeback_data(writeback_data)
+        .reg_write(reg_write),
+        .write_reg(write_reg),
+        .resultW(resultW)
     );
 
     hazard hazard(

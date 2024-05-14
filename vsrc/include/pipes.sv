@@ -43,7 +43,7 @@ package pipes;
 
     typedef struct packed {
         u2 forwardA, forwardB;
-        u32 aluoutM, resultW;
+        u32 aluout, result;
     } execute_forward_data_t;
 
     typedef struct packed {
@@ -73,8 +73,8 @@ package pipes;
     typedef struct packed {
         logic mem_to_reg, reg_write;
         u32 alu_result;
-        u32 write_data;
         creg_addr_t write_reg;
+        u32 read_data;
     } m_w_reg_t;
 
 endpackage
