@@ -15,10 +15,29 @@ module core
         output u1 write_enable
     );
 
-    //wires of writeback
+    //wires for forward
+    u2 forwardA, forwardB;
+
+    //wires for fetch & pc_select
+    u32 pc, pc_plus_4;
+
+    assign instr_addr = pc;
+    assign pc_plus_4 = f_d_reg.pc_plus_4;
+
+    //wires for decode
+    u32 rd1, rd2;
+
+    //wires for writeback
     creg_addr_t write_reg;
     u32 writeback_data;
     logic reg_write, mem_to_reg, 
+
+    f_d_reg_t f_d_reg;
+    d_e_reg_t d_e_reg;
+    e_m_reg_t e_m_reg;
+    m_w_reg_t m_w_reg;
+
+    execute_forward_data_t execute_forward_data;
     
     /* instruction */
     /*u32 pc, pc_nxt, src_a, rd2;
@@ -53,18 +72,18 @@ module core
     );
 
     decode decode(
-        .clk(clk), .f_d_reg(f_d_reg),
-        .src_a(src_a), .rd2(rd2),
-        .branch_judge(branch_judge),
-        .jump_judge(jump_judge),
-        .branch_address(branch_address),
-        .jump_address(jump_address),
+        .clk(clk),
+        .rd1(rd1), .rd2(rd2),
+        .f_d_reg(f_d_reg),
         .d_e_reg(d_e_reg)
     );
 
     execute execute(
         .clk(clk),
+        .forwardA(forwardA),
+        .forwardB(forwardB),
         .d_e_reg(d_e_reg),
+        .execute_forward_data(execute_forward_data),
         .e_m_reg(e_m_reg)
     );
 

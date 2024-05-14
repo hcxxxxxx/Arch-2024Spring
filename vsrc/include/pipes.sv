@@ -42,13 +42,18 @@ package pipes;
     } hazard_data_t;
 
     typedef struct packed {
+        u2 forwardA, forwardB;
+        u32 aluoutM, resultW;
+    } execute_forward_data_t;
+
+    typedef struct packed {
         u32 instruction;
         u32 pc_plus_4;
     } f_d_reg_t;
 
     typedef struct packed {
         u32 pc_plus_4;
-        u32 zeroimm32, signimm32;
+        u32 imm32;
         u32 rd1, rd2;
         creg_addr_t rs, rt, rd;
         u6 alu_op;
@@ -62,6 +67,7 @@ package pipes;
         u32 write_data;
         logic reg_write, mem_to_reg, mem_write, branch;
         logic zero;
+        u32 pc_branch;
     } e_m_reg_t;
 
     typedef struct packed {

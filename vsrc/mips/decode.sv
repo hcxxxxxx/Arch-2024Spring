@@ -10,13 +10,15 @@ module decode
         output d_e_reg_t d_e_reg
     );
 
+    //register
     f_d_reg_t f_d;
-    u6 op, func;
-
     always_ff @(posedge clk) begin
         f_d <= f_d_reg;
     end
-    
+
+    u6 op, func;
+    logic ext_op;
+
     assign op = f_d.instruction[31:26];
     assign func = f_d.instruction[5:0];
 
@@ -28,6 +30,8 @@ module decode
     assign d_e_reg.rt = f_d.instruction[20:16];
     assign d_e_reg.rd = f_d.instruction[15:11];
 
+    assign ext_op = (op == F6_ADDI || op == F6_LW || op == F6_SW || op == F6_BEQ);
+
     assign d_e_reg.reg_write = (op == F6_R_TYPE || op == F6_ADDI || op == F6_LW) && (func != F6_NOP);
     assign d_e_reg.mem_to_reg = (op == F6_LW);
     assign d_e_reg.mem_write = (op == F6_SW);
@@ -36,9 +40,7 @@ module decode
     assign d_e_reg.branch = (op == F6_BEQ);
     assign d_e_reg.alu_op = (op == F6_R_TYPE) ? func : op;
 
-    imm_extend zero_extend(.extop(1'b0), .imm16(f_d.instruction[15:0]), .imm32(d_e_reg.zeroimm32));
-    imm_extend sign_extend(.extop(1'b1), .imm16(f_d.instruction[15:0]), .imm32(d_e_reg.signimm32));
-
+    imm_extend zero_extend(.extop(ext_op), .imm16(f_d.instruction[15:0]), .imm32(d_e_reg.imm32));
 endmodule
 
 module imm_extend
