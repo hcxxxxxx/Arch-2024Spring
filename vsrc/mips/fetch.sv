@@ -12,16 +12,6 @@ module fetch
     assign f_d_reg.instruction = instruction;
     assign f_d_reg.pc_plus_4 = pc + 4;
 
-    /*always_ff @(posedge clk) begin
-        if(reset) begin
-            pc_fetch <= 32'b0;
-        end
-        else begin
-            if(branch_judge) pc_fetch <= branch_address;
-            else if(jump_judge) pc_fetch <= jump_address;
-            else pc_fetch <= pc_fetch + 4;
-        end
-    end*/
 endmodule
 
 module pc_select
@@ -32,9 +22,21 @@ module pc_select
         input logic pcsrcE,
         input u32 pc_plus_4,
         input u32 pc_branch,
-
-
+        output u32 pc_select
     );
+
+    always_ff @(posedge clk) begin
+        if(reset) pc_select <= 32'b0;
+        else begin
+            if(!stallF) begin
+                pc_select <= (pcsrcE == 1'b1) ? pc_branch : pc_plus_4;
+            end
+        end
+    end
+
+endmodule
+
+`endif
 
     //beq
     //addi
@@ -43,7 +45,3 @@ module pc_select
     //F D E M W
     //  F D E M W
     //    F D E M W
-
-endmodule
-
-`endif

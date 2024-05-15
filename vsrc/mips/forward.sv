@@ -4,7 +4,6 @@
 module forward
     import common::*;
     import pipes::*;(
-        input logic clk, reset
     );
 
     //useless

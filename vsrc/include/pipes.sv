@@ -30,6 +30,10 @@ package pipes;
 /* Define pipeline structures here */
 
     typedef struct packed {
+        u32 pc_f, pc_d, pc_e, pc_m, pc_w;
+    } pcs_t;
+
+    typedef struct packed {
         logic stallF, stallD, stallE;
         logic flushM;
         u2 forwardA, forwardB;
@@ -47,10 +51,11 @@ package pipes;
     typedef struct packed {
         u32 pc_plus_4;
         u32 imm32;
+        u26 offset;
         u32 rd1, rd2;
         creg_addr_t rs, rt, rd;
         u6 alu_op;
-        logic reg_write, mem_to_reg, mem_write, alu_src, reg_dst, branch;
+        logic reg_write, mem_to_reg, mem_write, alu_src, reg_dst, branch, jump;
     } d_e_reg_t;
 
     typedef struct packed {
@@ -58,7 +63,7 @@ package pipes;
         u32 alu_result;
         creg_addr_t write_reg;
         u32 write_data;
-        logic reg_write, mem_to_reg, mem_write, branch;
+        logic reg_write, mem_to_reg, mem_write, branch, jump;
         logic zero;
         u32 pc_branch;
     } e_m_reg_t;

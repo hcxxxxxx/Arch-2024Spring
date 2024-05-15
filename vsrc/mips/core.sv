@@ -15,6 +15,16 @@ module core
         output u1 write_enable
     );
 
+    //pcs
+    pcs_t pcs;
+    assign pcs.pc_f = pc;
+    always_ff @(posedge clk) begin
+        pcs.pc_w <= pcs.pc_m;
+        pcs.pc_m <= pcs.pc_e;
+        pcs.pc_e <= pcs.pc_d;
+        pcs.pc_d <= pcs.pc_f;
+    end
+
     //wires for hazard
     hazard_data_t hazard_data;
 
@@ -22,7 +32,7 @@ module core
     u32 pc, pc_plus_4;
 
     assign instr_addr = pc;
-    assign pc_plus_4 = f_d_reg.pc_plus_4;
+    assign pc_plus_4 = pc + 4;
 
     //wires for decode
     u32 rd1, rd2;
@@ -37,7 +47,7 @@ module core
     u32 writedataM, aluoutM;
     logic pcsrcE;
 
-    assign pcsrcE = e_m_reg.zero && e_m_reg.branch;
+    assign pcsrcE = (e_m_reg.zero && e_m_reg.branch) || e_m_reg.jump;
     assign write_enable = e_m_reg.mem_write;
     assign data_addr = aluoutM;
     assign write_data = writedataM;
@@ -54,12 +64,20 @@ module core
     e_m_reg_t e_m_reg;
     m_w_reg_t m_w_reg;
 
+    initial begin
+        f_d_reg = '0;
+        d_e_reg = '0;
+        e_m_reg = '0;
+        m_w_reg = '0;
+    end
+
     pc_select pc_select(
         .clk(clk), .reset(reset),
         .stallF(hazard_data.stallF),
         .pcsrcE(pcsrcE),
-        .pc_plus_4(f_d_reg.pc_plus_4),
-        .pc_branch(e_m_reg.pc_branch)
+        .pc_plus_4(pc_plus_4),
+        .pc_branch(e_m_reg.pc_branch),
+        .pc_select(pc)
     );
 
     fetch fetch(
@@ -73,6 +91,7 @@ module core
         .rd1(rd1), .rd2(rd2),
         .f_d_reg(f_d_reg),
         .stallD(hazard_data.stallD),
+        .flushD(pcsrcE),
         .d_e_reg(d_e_reg)
     );
 

@@ -27,10 +27,16 @@ module execute
     assign e_m_reg.mem_to_reg = d_e.mem_to_reg;
     assign e_m_reg.mem_write = d_e.mem_to_reg;
     assign e_m_reg.branch = d_e.branch;
+    assign e_m_reg.jump = d_e.jump;
 
     assign src_b2 = d_e.imm32;
     assign imm32x4 = {d_e.imm32[29:0], 2'b00};
-    assign e_m_reg.pc_branch = imm32x4 + d_e.pc_plus_4;
+    //assign e_m_reg.pc_branch = imm32x4 + d_e.pc_plus_4;
+
+    always_comb begin
+        if(e_m_reg.jump) e_m_reg.pc_branch = {d_e.pc_plus_4[31:28], d_e.offset[25:0], 2'b00}; 
+        else e_m_reg.pc_branch = imm32x4 + d_e.pc_plus_4;
+    end
 
     assign rsE = d_e.rs;
     assign rtE = d_e.rt;
