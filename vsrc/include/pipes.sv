@@ -30,19 +30,12 @@ package pipes;
 /* Define pipeline structures here */
 
     typedef struct packed {
-        logic flush;
-        logic stall;
-    } hazard_data_item_t;
-
-    typedef struct packed {
-        hazard_data_item_t fetch;
-        hazard_data_item_t decode;
-        hazard_data_item_t execute;
-        hazard_data_item_t memory;
+        logic stallF, stallD, stallE;
+        logic flushM;
+        u2 forwardA, forwardB;
     } hazard_data_t;
 
     typedef struct packed {
-        u2 forwardA, forwardB;
         u32 aluout, result;
     } execute_forward_data_t;
 

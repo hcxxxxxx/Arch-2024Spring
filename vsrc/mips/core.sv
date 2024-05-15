@@ -15,8 +15,8 @@ module core
         output u1 write_enable
     );
 
-    //wires for forward
-    u2 forwardA, forwardB;
+    //wires for hazard
+    hazard_data_t hazard_data;
 
     //wires for fetch & pc_select
     u32 pc, pc_plus_4;
@@ -29,12 +29,15 @@ module core
 
     //wires for execute & forward
     execute_forward_data_t execute_forward_data;
+    creg_addr_t rsE, rtE;
     assign execute_forward_data.aluout = aluoutM;
+    assign execute_forward_data.result = resultW;
 
     //wires for memory
     u32 writedataM, aluoutM;
-    logic pcsrcM;
+    logic pcsrcE;
 
+    assign pcsrcE = e_m_reg.zero && e_m_reg.branch;
     assign write_enable = e_m_reg.mem_write;
     assign data_addr = aluoutM;
     assign write_data = writedataM;
@@ -43,7 +46,7 @@ module core
     //wires for writeback
     u32 resultW;
     creg_addr_t write_reg;
-    logic reg_write;
+    logic reg_write, mem_to_reg;
 
     //registers
     f_d_reg_t f_d_reg;
@@ -51,30 +54,12 @@ module core
     e_m_reg_t e_m_reg;
     m_w_reg_t m_w_reg;
 
-    /* instruction */
-    /*u32 pc, pc_nxt, src_a, rd2;
-    u32 branch_address, jump_address;
-    logic branch_judge, jump_judge;
-
-    creg_addr_t wb_rt, wb_rd;
-    logic wb_reg_dst, wb_reg_write;
-    u32 writeback_data;
-
-    f_d_reg_t f_d_reg;
-    d_e_reg_t d_e_reg;
-    e_m_reg_t e_m_reg;
-    m_w_reg_t m_w_reg;
-
-    assign instr_addr = pc;
-    assign data_addr = m_w_reg.alu_result;
-
-    assign pc = f_d_reg.pc;
-    assign pc_nxt = pc + 4;
-    assign write_data = e_m_reg.rt_word;
-    assign write_enable = e_m_reg.mem_write;*/
-
     pc_select pc_select(
-
+        .clk(clk), .reset(reset),
+        .stallF(hazard_data.stallF),
+        .pcsrcE(pcsrcE),
+        .pc_plus_4(f_d_reg.pc_plus_4),
+        .pc_branch(e_m_reg.pc_branch)
     );
 
     fetch fetch(
@@ -87,6 +72,7 @@ module core
         .clk(clk),
         .rd1(rd1), .rd2(rd2),
         .f_d_reg(f_d_reg),
+        .stallD(hazard_data.stallD),
         .d_e_reg(d_e_reg)
     );
 
@@ -94,32 +80,40 @@ module core
         .clk(clk),
         .d_e_reg(d_e_reg),
         .execute_forward_data(execute_forward_data),
-        .e_m_reg(e_m_reg)
+        .hazard_data(hazard_data),
+        .e_m_reg(e_m_reg),
+        .rsE(rsE), .rtE(rtE)
     );
 
     memory memory(
         .clk(clk),
+        .flushM(hazard_data.flushM),
         .e_m_reg(e_m_reg),
         .m_w_reg(m_w_reg),
         .aluoutM(aluoutM),
-        .writedataM(writedataM),
-        .pcsrcM(pcsrcM)
+        .writedataM(writedataM)
     );
 
     writeback writeback(
         .clk(clk),
         .m_w_reg(m_w_reg),
         .reg_write(reg_write),
+        .mem_to_reg(mem_to_reg),
         .write_reg(write_reg),
         .resultW(resultW)
     );
 
     hazard hazard(
-
-    );
-
-    forward forward(
-
+        .rsD(d_e_reg.rs), .rtD(d_e_reg.rt),
+        .rsE(rsE), .rtE(rtE),
+        .write_reg_M(m_w_reg.write_reg),
+        .write_reg_W(write_reg),
+        .mem_to_reg_E(e_m_reg.mem_to_reg),
+        .mem_to_reg_M(m_w_reg.mem_to_reg),
+        .mem_to_reg_W(mem_to_reg),
+        .reg_write_M(m_w_reg.reg_write),
+        .reg_write_W(reg_write),
+        .hazard_data(hazard_data)
     );
 
     regfile regfile(
@@ -127,7 +121,7 @@ module core
         .ra1(d_e_reg.rs), .ra2(d_e_reg.rt),
         .rd1(rd1), .rd2(rd2),
         .wa(write_reg),
-        .wd(writeback_data),
+        .wd(resultW),
         .we(reg_write)
     );
 

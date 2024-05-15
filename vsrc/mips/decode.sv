@@ -5,15 +5,16 @@ module decode
     import common::*;
     import pipes::*;(
         input logic clk,
-        input u32 rd1, rd2;
+        input u32 rd1, rd2,
         input f_d_reg_t f_d_reg,
+        input logic stallD,
         output d_e_reg_t d_e_reg
     );
 
     //register
     f_d_reg_t f_d;
     always_ff @(posedge clk) begin
-        f_d <= f_d_reg;
+        if(!stallD) f_d <= f_d_reg;
     end
 
     u6 op, func;

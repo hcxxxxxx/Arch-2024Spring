@@ -27,8 +27,22 @@ endmodule
 module pc_select
     import common::*;
     import pipes::*;(
-        
+        input logic clk, reset,
+        input logic stallF,
+        input logic pcsrcE,
+        input u32 pc_plus_4,
+        input u32 pc_branch,
+
+
     );
+
+    //beq
+    //addi
+    //addi
+
+    //F D E M W
+    //  F D E M W
+    //    F D E M W
 
 endmodule
 

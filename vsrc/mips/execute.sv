@@ -7,13 +7,15 @@ module execute
         input logic clk,
         input d_e_reg_t d_e_reg,
         input execute_forward_data_t execute_forward_data,
-        output e_m_reg_t e_m_reg
+        input hazard_data_t hazard_data,
+        output e_m_reg_t e_m_reg,
+        output creg_addr_t rsE, rtE
     );
 
     //register
     d_e_reg_t d_e;
     always_ff @(posedge clk) begin
-        d_e <= d_e_reg;
+        if(!hazard_data.stallE) d_e <= d_e_reg;
     end
 
     u32 src_a, src_b, src_b1, src_b2;
@@ -30,6 +32,9 @@ module execute
     assign imm32x4 = {d_e.imm32[29:0], 2'b00};
     assign e_m_reg.pc_branch = imm32x4 + d_e.pc_plus_4;
 
+    assign rsE = d_e.rs;
+    assign rtE = d_e.rt;
+
     alu alu(.alu_op(d_e.alu_op),
             .src_a(src_a),
             .src_b(src_b),
@@ -38,11 +43,11 @@ module execute
 
     Mux3 Mux3A(.in0(d_e.rd1), .in1(execute_forward_data.result),
                .in2(execute_forward_data.aluout),
-               .Muxsel(execute_forward_data.forwardA),
+               .Muxsel(hazard_data.forwardA),
                .out(src_a));
     Mux3 Mux3B(.in0(d_e.rd2), .in1(execute_forward_data.result),
                .in2(execute_forward_data.aluout),
-               .Muxsel(execute_forward_data.forwardB), .out(src_b1));
+               .Muxsel(hazard_data.forwardB), .out(src_b1));
 
     Mux2 Mux2A(.in0(d_e.rt), .in1(d_e.rd), .Muxsel(d_e.reg_dst), .out(e_m_reg.write_reg));
     Mux2 Mux2B(.in0(src_b1), .in1(src_b2), .Muxsel(d_e.alu_src), .out(src_b));
