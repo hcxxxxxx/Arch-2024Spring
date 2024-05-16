@@ -8,7 +8,8 @@ module memory
         input logic flushM,
         input e_m_reg_t e_m_reg,
         output m_w_reg_t m_w_reg,
-        output u32 aluoutM, writedataM
+        output u32 aluoutM, writedataM,
+        output logic mem_write_M
     );
 
     //register
@@ -25,6 +26,7 @@ module memory
 
     assign aluoutM = e_m.alu_result;
     assign writedataM = e_m.write_data;
+    assign mem_write_M = e_m.mem_write;
 
 endmodule
 

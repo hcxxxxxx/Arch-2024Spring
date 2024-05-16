@@ -41,14 +41,15 @@ module core
     execute_forward_data_t execute_forward_data;
     creg_addr_t rsE, rtE;
     assign execute_forward_data.aluout = aluoutM;
-    assign execute_forward_data.result = resultW;
+    assign execute_forward_data.resultW = resultW;
+    assign execute_forward_data.resultM = read_data;
 
     //wires for memory
     u32 writedataM, aluoutM;
-    logic pcsrcE;
+    logic pcsrcE, mem_write_M;
 
     assign pcsrcE = (e_m_reg.zero && e_m_reg.branch) || e_m_reg.jump;
-    assign write_enable = e_m_reg.mem_write;
+    assign write_enable = mem_write_M;
     assign data_addr = aluoutM;
     assign write_data = writedataM;
     assign m_w_reg.read_data = read_data;
@@ -110,7 +111,8 @@ module core
         .e_m_reg(e_m_reg),
         .m_w_reg(m_w_reg),
         .aluoutM(aluoutM),
-        .writedataM(writedataM)
+        .writedataM(writedataM),
+        .mem_write_M(mem_write_M)
     );
 
     writeback writeback(

@@ -21,12 +21,12 @@ module hazard
         hazard_data.stallE = 1'b0;
         hazard_data.flushM = 1'b0;
 
-        if(reg_write_W) begin
+        if(reg_write_W) begin //forward from writeback
             if(write_reg_W == rsE) hazard_data.forwardA = 2'b01;
             else if(write_reg_W == rtE) hazard_data.forwardB = 2'b01;
         end
 
-        if(reg_write_M) begin
+        if(reg_write_M) begin //forward from memory
             if(mem_to_reg_M == 1'b0) begin
                 if(write_reg_M == rsE) hazard_data.forwardA = 2'b10;
                 else if(write_reg_M == rtE) hazard_data.forwardB = 2'b10;
@@ -36,11 +36,18 @@ module hazard
                 hazard_data.stallD = 1'b1;
                 hazard_data.stallE = 1'b1;
                 hazard_data.flushM = 1'b1;
-                if(write_reg_M == rsE) hazard_data.forwardA = 2'b01;
-                else if(write_reg_M == rtE) hazard_data.forwardB = 2'b01;
+                if(write_reg_M == rsE) hazard_data.forwardA = 2'b11;
+                else if(write_reg_M == rtE) hazard_data.forwardB = 2'b11;
             end
         end
     end
+
+    /*always_ff @(posedge clk) begin
+        if(reg_write_M && (!mem_to_reg_M)) begin
+            if(write_reg_M == rsE) hazard_data.forwardA <= 2'b01;
+            else if(write_reg_M == rtE) hazard_data.forwardB <= 2'b01;
+        end
+    end*/
 
 endmodule
 

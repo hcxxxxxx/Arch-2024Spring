@@ -25,13 +25,12 @@ module execute
     assign e_m_reg.write_data = src_b1;
     assign e_m_reg.reg_write = d_e.reg_write;
     assign e_m_reg.mem_to_reg = d_e.mem_to_reg;
-    assign e_m_reg.mem_write = d_e.mem_to_reg;
+    assign e_m_reg.mem_write = d_e.mem_write;
     assign e_m_reg.branch = d_e.branch;
     assign e_m_reg.jump = d_e.jump;
 
     assign src_b2 = d_e.imm32;
     assign imm32x4 = {d_e.imm32[29:0], 2'b00};
-    //assign e_m_reg.pc_branch = imm32x4 + d_e.pc_plus_4;
 
     always_comb begin
         if(e_m_reg.jump) e_m_reg.pc_branch = {d_e.pc_plus_4[31:28], d_e.offset[25:0], 2'b00}; 
@@ -47,12 +46,12 @@ module execute
             .zero(e_m_reg.zero),
             .alu_result(e_m_reg.alu_result));
 
-    Mux3 Mux3A(.in0(d_e.rd1), .in1(execute_forward_data.result),
-               .in2(execute_forward_data.aluout),
+    Mux4 Mux4A(.in0(d_e.rd1), .in1(execute_forward_data.resultW),
+               .in2(execute_forward_data.aluout), .in3(execute_forward_data.resultM),
                .Muxsel(hazard_data.forwardA),
                .out(src_a));
-    Mux3 Mux3B(.in0(d_e.rd2), .in1(execute_forward_data.result),
-               .in2(execute_forward_data.aluout),
+    Mux4 Mux4B(.in0(d_e.rd2), .in1(execute_forward_data.resultW),
+               .in2(execute_forward_data.aluout), .in3(execute_forward_data.resultM),
                .Muxsel(hazard_data.forwardB), .out(src_b1));
 
     Mux2 Mux2A(.in0(d_e.rt), .in1(d_e.rd), .Muxsel(d_e.reg_dst), .out(e_m_reg.write_reg));
@@ -60,10 +59,10 @@ module execute
 
 endmodule
 
-module Mux3
+module Mux4
     import common::*;
     import pipes::*;(
-        input u32 in0, in1, in2,
+        input u32 in0, in1, in2, in3,
         input u2 Muxsel,
         output u32 out
     );
@@ -73,6 +72,7 @@ module Mux3
             2'b00: out = in0;
             2'b01: out = in1;
             2'b10: out = in2;
+            2'b11: out = in3;
             default: out = 32'b0;
         endcase
     end

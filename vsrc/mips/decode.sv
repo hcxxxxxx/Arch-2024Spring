@@ -35,7 +35,7 @@ module decode
 
     assign ext_op = (op == F6_ADDI || op == F6_LW || op == F6_SW || op == F6_BEQ);
 
-    assign d_e_reg.reg_write = (op == F6_R_TYPE || op == F6_ADDI || op == F6_LW) && (func != F6_NOP);
+    assign d_e_reg.reg_write = (op == F6_R_TYPE || op == F6_ADDI || op == F6_LW) && (f_d.instruction != 32'b0);
     assign d_e_reg.mem_to_reg = (op == F6_LW);
     assign d_e_reg.mem_write = (op == F6_SW);
     assign d_e_reg.alu_src = (op == F6_ADDI || op == F6_LW || op == F6_SW);

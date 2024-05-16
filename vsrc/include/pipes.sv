@@ -40,7 +40,7 @@ package pipes;
     } hazard_data_t;
 
     typedef struct packed {
-        u32 aluout, result;
+        u32 aluout, resultM, resultW;
     } execute_forward_data_t;
 
     typedef struct packed {
