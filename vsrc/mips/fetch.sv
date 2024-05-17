@@ -37,11 +37,3 @@ module pc_select
 endmodule
 
 `endif
-
-    //beq
-    //addi
-    //addi
-
-    //F D E M W
-    //  F D E M W
-    //    F D E M W

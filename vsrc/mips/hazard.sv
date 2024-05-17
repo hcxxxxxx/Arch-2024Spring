@@ -42,13 +42,6 @@ module hazard
         end
     end
 
-    /*always_ff @(posedge clk) begin
-        if(reg_write_M && (!mem_to_reg_M)) begin
-            if(write_reg_M == rsE) hazard_data.forwardA <= 2'b01;
-            else if(write_reg_M == rtE) hazard_data.forwardB <= 2'b01;
-        end
-    end*/
-
 endmodule
 
 `endif
