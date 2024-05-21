@@ -1,19 +1,32 @@
-# Arch-2024Spring
+# MIPS-32 CPU
 
-这是复旦大学 2024 年春季学期《计算机组成与体系结构》课程（COMP130191.05）的实验仓库。我们将实现基于MIPS指令集的不同架构处理器。
-
-暂定内容与时间安排如下：
-
-- 单周期处理器 （30%）week3 ~ week6
-- 多周期处理器 （30%）week7 ~ week10
-- 流水线处理器 （40%）week11 ~ week15
-
-本学期的课程，我们需要使用到如下工具：
-
-- Vivado：仿真、综合、生成bit文件
-- Git：采用 git 工具 对所有的 lab 进行管理并发布
-- （推荐使用vscode结合vivado进行开发）
-
-我们会不定时地更新代码仓库以解决bug（因此必须用clone把仓库拉到本地，这样才方便进行后续更新），每次更新的时候助教都会在群里或者上课的时候进行提醒，当然更好的是养成每次写代码前及时更新的习惯 。
-
-祝同学们这一学期过的充实愉快，学有所成！
+## Brief Introduction
+- This is a project concentrated mainly on the implementation of MIPS-32 single-cycle, multi-cycle and pipeline CPUs. The branches are as follows:
+  - **lab1-dev**: Single-cycle
+  - **lab2-dev**: Multi-cycle
+  - **lab3-dev**: Pipeline
+## Background & Note
+- This is the repository of the *Arch-2024 Spring* course in Computer Science, Fudan University.
+- The CPU is implemented using *SystemVerilog*.
+- It's just a fairly simple implementation of a small instruction set.
+***
+## Tools
+- *Vivado 2020.2* (or later version)
+  - [Download](https://china.xilinx.com/support/download.html)
+  - Used for Simulation, Synthesis, Generate bitstream.
+- *Git*
+  - [Manual](https://git-scm.com/book/zh/v2)
+  - Used for managing files, pulling repositories & updating.
+- *Visual Studio Code*
+***
+## Supported Instructions
+- **ADD, SUB, AND, OR, SLT**
+- **ADDI**
+- **BEQ, J**
+- **SW, LW**
+- **NOP**
+***
+## Information
+- [x] [MIPS Instructions](https://blog.csdn.net/goodlinux/article/details/6731484)
+- [x] [MIPS Multi-cycle](https://zhuanlan.zhihu.com/p/681118372)
+- [x] [MIPS Pipeline](https://blog.csdn.net/weixin_45459354/article/details/120625907)
